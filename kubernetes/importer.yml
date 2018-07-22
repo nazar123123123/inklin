@@ -1,0 +1,13 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: importer
+  labels:
+    app: importer
+spec:
+  nodeSelector:
+    type: worker
+  containers:
+    - name: importer
+      image: inklin/importer_batch:latest
+     

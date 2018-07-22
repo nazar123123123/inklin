@@ -1,0 +1,29 @@
+{
+    "configurations": [
+        {
+            "name": "Launch Program (AZDS)",
+            "type": "node",
+            "request": "launch",
+            "protocol": "inspector",
+            "preLaunchTask": "azds: ready",
+            "cwd": "${workspaceRoot}",
+            "port": 59447,
+            "address": "127.0.0.1",
+            "localRoot": "${workspaceRoot}",
+            "remoteRoot": "/app",
+            "runtimeExecutable": "azds",
+            "runtimeArgs": [
+                "exec",
+                "--on-exit-resume-up",
+                "--no-telemetry",
+                "--",
+                "node",
+                "--inspect=0.0.0.0:9229",
+                "--inspect-brk",
+                "--nolazy",
+                "server.js"
+            ],
+            "timeout": 30000
+        }
+    ]
+}

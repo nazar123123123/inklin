@@ -1,0 +1,207 @@
+body {
+    font: 14px "Century Gothic", Futura, sans-serif;
+    margin: 0px;
+    background-color: rgb(56, 55, 55);
+    height: 100%;
+  }
+  
+  html {
+    height: 100%;
+  }
+  ol, ul {
+    padding-left: 30px;
+  }
+  
+  .status {
+    margin-bottom: 10px;
+  }
+  
+  .square {
+    background: #fff;
+    border: 1px solid #999;
+    float: left;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 34px;
+    height: 34px;
+    margin-right: -1px;
+    margin-top: -1px;
+    padding: 0;
+    text-align: center;
+    width: 34px;
+  }
+  
+  .square:focus {
+    outline: none;
+  }
+  
+  .kbd-navigation .square:focus {
+    background: #ddd;
+  }
+  
+  .game {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .game-info {
+    margin-left: 20px;
+  }
+  
+
+
+  .progressIndicator {
+    width: 25%;
+    height:100px;
+    text-align: left;
+    position: fixed;
+    top: 55%;
+    left: 42%;
+    margin-left:-70px;
+    margin-top:-50px;   
+}
+
+
+.buildInfo {
+  text-align: left;
+  position: absolute;
+  bottom: 0px;
+  right: 10px;
+  color: "white";
+  z-index: 9999;
+  color: #40c4ff;
+  font-size: 12px;
+
+}
+
+.slider {
+  position: absolute;
+  top: 300px;
+  right: 10px;
+  width: 450px;
+  opacity: .6;
+  height: 50px;
+
+  /* Height of the footer */
+  z-index: 9999;
+  color: #40c4ff;
+  background-color: black;
+}
+
+
+#root {
+  height: 100%;
+}
+
+.rightpanel {
+  position: absolute;
+
+  top: 10px; 
+  right: 10px;
+  width: 20%;
+}
+
+.datepicker input{
+  font-size: 0.8em;
+}
+
+.volumechart {
+  opacity: .6;
+  margin-top: 10px;
+
+  /* Height of the footer */
+  z-index: 9999;
+  color: #40c4ff;
+  background-color: black;
+}
+
+.history {
+  opacity: .6;
+  margin-top: 10px;
+
+  /* Height of the footer */
+  z-index: 9999;
+  color: #40c4ff;
+  background-color: black;
+}
+
+.searchElement {
+  padding: 10px;
+}
+
+.searchPane {
+  opacity: .6;
+  padding-right: 10px;
+
+  /* Height of the footer */
+  z-index: 9999;
+  color: #40c4ff;
+  background-color: black;
+}
+
+
+.infoPane {
+  margin-top: 10px;
+  opacity: .6;
+  padding-right: 10px;
+
+  /* Height of the footer */
+  z-index: 9999;
+  color: #40c4ff;
+  background-color: black;
+}
+
+.sharing {
+  position: absolute;
+  top: 20%;
+  left: 70px;
+  opacity: .6;
+
+  /* Height of the footer */
+  z-index: 9999;
+  color: #40c4ff;
+  background-color: black;
+}
+
+
+
+.leftmenu {
+  position: absolute;
+  top: 100px;
+  left: 0px;
+  opacity: .6;
+  width: 100px;
+  /* Height of the footer */
+  z-index: 9999;
+  color: #40c4ff;
+  background-color: black;
+}
+
+.vertical-timeline-element-title {
+  font-size: 10px;
+}
+
+.timeline {
+  position: absolute;
+  bottom: 100px;
+  right: 10px;
+  opacity: .6;
+  padding-right: 10px;
+
+  /* Height of the footer */
+  z-index: 9999;
+  color: #40c4ff;
+  background-color: black;
+}
+  .menu {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    /* Height of the footer */
+    z-index: 9999;
+  }
+
+  .searchfield {
+    width: 30%
+  }

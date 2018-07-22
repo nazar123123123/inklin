@@ -1,0 +1,56 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mongo-mongodb
+  labels:
+    app: mongo-mongodb
+    release: "mongo"
+spec:
+  template:
+    metadata:
+      labels:
+        app: mongo-mongodb
+    spec:
+      containers:
+      - name: mongo-mongodb
+        image: "bitnami/mongodb:3.7.1-r0"
+        env:
+        - name: MONGODB_DATABASE
+          value: "visualise_ethereum"
+        - name: MONGODB_EXTRA_FLAGS
+          value: "--noIndexBuildRetry"
+
+        ports:
+        - name: mongodb
+          containerPort: 27017
+        livenessProbe:
+          exec:
+            command:
+            - mongo
+            - --eval
+            - "db.adminCommand('ping')"
+          initialDelaySeconds: 3600
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - mongo
+            - --eval
+            - "db.adminCommand('ping')"
+          initialDelaySeconds: 3600
+          timeoutSeconds: 1
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/mongodb
+        resources:
+          requests:
+            cpu: 100m
+            memory: 6Gi
+
+      nodeSelector:
+        worker: db
+          
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: mongo-disk

@@ -1,0 +1,8 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mongo-mongodb
+  namespace: default
+spec:
+  type: ExternalName
+  externalName: mongo.b2gnlfzp2fxehlidwn5tdurohb.bx.internal.cloudapp.net

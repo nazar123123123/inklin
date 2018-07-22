@@ -1,0 +1,11 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: importerlive
+  labels:
+    app: importerlive
+spec:
+  containers:
+    - name: importerlive
+      image: inklin/importer_live:latest
+       

@@ -1,0 +1,25 @@
+{
+    "tasks": [
+        {
+            "label": "azds: ready",
+            "command": "azds",
+            "args": [
+                "up",
+                "--keep-alive",
+                "--port",
+                "59447:9229",
+                "--await-exec",
+                "--config",
+                "develop",
+                "--no-telemetry",
+                "--",
+                "npm",
+                "start"
+            ],
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "problemMatcher": []
+        }
+    ]
+}

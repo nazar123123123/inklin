@@ -1,0 +1,6 @@
+
+# Default values for chart
+replicaCount: 2
+image: "inklin.azurecr.io/shotter"
+imageTag: "latest"
+storage: ""

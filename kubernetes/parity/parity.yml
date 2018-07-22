@@ -1,0 +1,28 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: parity
+  labels:
+    app: parity
+  
+spec:
+
+  containers:
+    - name: parity
+      image: parity/parity:nightly
+      ports:
+      - containerPort: 8545
+      args: ["--geth", "--unsafe-expose", "--cache-size", "4048"]
+      volumeMounts:
+      - mountPath: "/root/.local/share/io.parity.ethereum/"
+        name: parity-pv
+
+  nodeSelector:
+    worker: parity
+
+  volumes:
+      - name: parity-pv
+        azureDisk:
+          kind: Managed
+          diskName: parity-pv
+          diskURI: /subscriptions/63bb1026-40d0-4a59-b97d-8b343eefecb3/resourceGroups/MC_fether_fether_eastus/providers/Microsoft.Compute/disks/parity-pv

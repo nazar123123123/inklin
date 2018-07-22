@@ -1,0 +1,43 @@
+shotterVersion: v1
+kind: Service
+metadata:
+  name: shotter
+  labels:
+    name: shotter
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  selector:
+    app: shotter
+---
+shotterVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shotter
+spec:
+  replicas: {{.Values.replicaCount}}
+  selector:
+    matchLabels:
+      app: shotter
+  template:
+    metadata:
+      labels:
+        app: shotter
+    spec:
+      imagePullSecrets:
+        - name: acr-secret
+      containers:
+      - name: shotter
+        image: "{{.Values.image}}:{{.Values.imageTag}}"
+        env:
+        - name: AZURE_STORAGE_CONNECTION_STRING
+          value: "{{.Values.storage}}"
+        resources:
+          requests:
+            cpu: "100m"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80

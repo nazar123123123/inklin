@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongopv
+  annotations:
+    volume.beta.kubernetes.io/storage-class: managed-premium
+ 
+spec:
+  capacity:
+    storage: 500Gi 
+  accessModes:
+    - ReadWriteOnce
+  azureDisk: 
+    diskName: mongo-pv 
+    kind: Managed
+    diskURI: /subscriptions/63bb1026-40d0-4a59-b97d-8b343eefecb3/resourceGroups/MC_fether_fether_eastus/providers/Microsoft.Compute/disks/mongo-pv
+    cachingMode: ReadWrite  
+    fsType: ext4  
+    readOnly: false
+    
