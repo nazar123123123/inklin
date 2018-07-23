@@ -366,12 +366,12 @@ class Inklin extends React.Component {
         console.log("Still Waiting");
       }
 
-//         const streamTimer = setInterval(() => {
-//           this.stream()
-// //  //        this.state.network.fit({animation:true})
-//         }, 5000);
+        const streamTimer = setInterval(() => {
+          this.stream()
+        
+        }, 5000);
 
-   //   this.setState({ streamTimer: streamTimer })
+     this.setState({ streamTimer: streamTimer })
     });
 
   }
