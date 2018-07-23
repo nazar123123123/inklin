@@ -411,7 +411,7 @@ class Inklin extends React.Component {
       this.getAll(searchTerm)
     } else {
       if (myURL.hash === "#share") {
-        this.setState({ volumeIsHidden: true, menuIsHidden: true, infoIsHidden: true })
+        this.setState({ volumeIsHidden: true, menuIsHidden: true, infoIsHidden: true, searchIsHidden: true, statsIsHidden: true })
       }
 
       this.stream()
@@ -453,10 +453,10 @@ class Inklin extends React.Component {
               springLength: 230,
               springConstant: 0.18
           },
-          maxVelocity: 16,
+          maxVelocity: 50,
           solver: 'forceAtlas2Based',
-          timestep: 0.35,
-          stabilization: {iterations: 10}
+          timestep: 1,
+          stabilization: false
       }
   };    
     return (

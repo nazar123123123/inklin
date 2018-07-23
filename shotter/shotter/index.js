@@ -36,7 +36,7 @@ function takeshot(block, context) {
         console.log(`Navigating to URL: ${block}`);
         await page.goto("http://inkl.in/" + block + "#share");
 
-        await delay(5000);
+        await delay(2000);
 
         process.stdout.write('Taking screenshots: .');
         // const screenshotPromises = [];
@@ -67,7 +67,7 @@ function takeshot(block, context) {
         }); 
         
 
-        await delay(1000);
+        await delay(2000);
         // await Promise.all(screenshotPromises);
         // console.log(`\nEncoding GIF`);
         // const encoder = new GIFEncoder(1024, 768);
