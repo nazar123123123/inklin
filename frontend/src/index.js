@@ -45,7 +45,6 @@ class Inklin extends React.Component {
 
     this.addData = this.addData.bind(this);
     this.handleContractChooserClose = this.handleContractChooserClose.bind(this);
-    this.handleDrawer = this.handleDrawer.bind(this)
 
     this.state = {
       network: {},
@@ -56,12 +55,9 @@ class Inklin extends React.Component {
       displayProgress: false,
       address: "0x274F3c32C90517975e29Dfc209a23f315c1e5Fc7",
       previousaddress: "0x274F3c32C90517975e29Dfc209a23f315c1e5Fc7",
-      highlightNodes: [],
-      highlightLink: null,
-      cameraOrbit: 0,
-      FG2DIsHidden: false,
-      FG3DIsHidden: true,
       volumeIsHidden: false,
+      searchIsHidden: false,
+      statsIsHidden: false,
       showSearch: false,
       placeholder: 'Search...',
       searchResults: [{ name: "One" }, { name: "two" }, { name: "three" }],
@@ -386,6 +382,14 @@ class Inklin extends React.Component {
     this.setState({ volumeIsHidden: !this.state.volumeIsHidden })
   }
 
+  hideSearch = () => {
+    this.setState({ searchIsHidden: !this.state.searchIsHidden })
+  }
+
+  hideStats = () => {
+    this.setState({ statsIsHidden: !this.state.statsIsHidden })
+  }
+
   handleLive = () => {
     console.log("Handling Live");
     this.state.isLive ? clearInterval(this.state.streamTimer) : this.stream()
@@ -460,22 +464,22 @@ class Inklin extends React.Component {
 
  
         <MuiThemeProvider theme={theme}>
+          <div className="leftpanel">
+            {!this.state.volumeIsHidden &&<VolumeChart data={this.state.volume_data} options={this.state.volume_options} shouldRedraw={this.state.shouldRedraw} />}
+          </div> 
+
           {/* {!this.state.menuIsHidden && <MenuAppBar onLuis={this.handleLuis} onSpeak={this.handleSpeak} placeholder={this.state.placeholder} />} */}
-          {!this.state.menuIsHidden && <MiniDrawer handleLive={this.handleLive} handleVolume={this.hideVolume} switchTo3d={this.switchTo3d} perspective2d={!this.state.FG3DIsHidden} showVolume={!this.state.volumeIsHidden} isLive={this.state.isLive} currentBlock={this.state.current_block} />}
+          {!this.state.menuIsHidden && <MiniDrawer handleLive={this.handleLive} handleVolume={this.hideVolume} handleSearch={this.hideSearch} handleStats={this.hideStats} showVolume={!this.state.volumeIsHidden} showStats={!this.state.statsIsHidden} showSearch={!this.state.searchIsHidden} isLive={this.state.isLive} currentBlock={this.state.current_block} />}
 
          {this.state.data.edges.length > 0 && <Graph getNetwork={network => this.setState({network}) } graph={this.state.data} events={events} options={options}  />}
 
           {this.state.displayProgress && <ProgressIndicator />}
 
           <SearchDialog open={this.state.showSearch} closeDrawer={this.handleCloseSearch} />
-          {/* <div className="leftpanel">
-
-          </div> */}
           <div className="rightpanel">
-          {!this.state.volumeIsHidden &&<VolumeChart data={this.state.volume_data} options={this.state.volume_options} shouldRedraw={this.state.shouldRedraw} />}
-            <SearchField handleFocus={this.props.handleFocus} handleLuis={this.handleLuis} />
-            <Info block_time={this.state.block_time} block_info={this.state.block_info} address={this.state.address} numberoftxs={this.state.numberoftxs} blocknumber={this.state.current_block} />
-           {this.state.current_block > 0 && <History current_block={this.state.current_block}/>}
+           {!this.state.searchIsHidden && <SearchField handleFocus={this.props.handleFocus} handleLuis={this.handleLuis} /> }
+           {!this.state.statsIsHidden &&  <Info block_time={this.state.block_time} block_info={this.state.block_info} address={this.state.address} numberoftxs={this.state.numberoftxs} blocknumber={this.state.current_block} /> }
+           {/* {this.state.current_block > 0 && <History current_block={this.state.current_block}/>} */}
           </div>
           {!this.state.menuIsHidden && <div className="buildInfo">
             Build: {process.env.REACT_APP_SHA}

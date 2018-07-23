@@ -139,11 +139,10 @@ class MiniDrawer extends React.Component {
               <ListItemIcon>
                 <EthereumIcon />
               </ListItemIcon>
-              <ListItemText primary="Change Perspective" />
             </ListItem>
 
             <ListItem button>
-            <ListItemIcon onClick={this.props.handleLive} data-tip={this.props.isLive ? "Stop Live View" : "Live View"  } >
+            <ListItemIcon onClick={this.props.handleLive} data-tip={this.props.isLive ? "Stop Live View" : "Start Live View"  } >
                 <GoLive style={this.props.isLive ? { color: "#2aaee2" } :  { color: "white" } }/>
               </ListItemIcon>
               <ListItemText primary="Switch Live" />
@@ -151,15 +150,15 @@ class MiniDrawer extends React.Component {
 
 
             <ListItem button>
-            <ListItemIcon onClick={this.props.handleLive} data-tip={this.props.isLive ? "Stop Live View" : "Live View"  } >
-                <ShowStats style={this.props.isLive ? { color: "#2aaee2" } :  { color: "white" } }/>
+            <ListItemIcon onClick={this.props.handleStats} data-tip={this.props.showStats ? "Hide Block Statistics" : "Show Block Statistics"  } >
+                <ShowStats style={this.props.showStats ? { color: "#2aaee2" } :  { color: "white" } }/>
               </ListItemIcon>
               <ListItemText primary="Switch Live" />
             </ListItem>
 
             <ListItem button>
-            <ListItemIcon onClick={this.props.switchTo3d} data-tip={this.props.perspective2d ? "Switch to 2D" : "Switch to 3D"  } >
-                <SearchIcon style={this.props.perspective2d && { color: "#2aaee2" } ||  { color: "white" }  } />
+            <ListItemIcon onClick={this.props.handleSearch} data-tip={this.props.showSearch ? "Hide Search" : "Show Search"  } >
+                <SearchIcon style={this.props.showSearch && { color: "#2aaee2" } ||  { color: "white" }  } />
               </ListItemIcon>
               <ListItemText primary="Show Search" />
             </ListItem>
