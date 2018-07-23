@@ -110,8 +110,8 @@ app.get('/api/inklin/live/:lastblock', function (req, res) {
 
 			
 			if (results.nodes.length > 0) {			
-				results.block_time = transactions[0].block_time
-				results.block_number = transactions[0].block_number
+				results.block_time = transactions[transactions.length -1].block_time
+				results.block_number = transactions[transactions.length -1].block_number
 			} else {
 				results.block_number = req.params.lastblock
 			}
