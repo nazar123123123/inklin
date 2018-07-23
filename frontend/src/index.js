@@ -356,10 +356,6 @@ class Inklin extends React.Component {
     clearInterval(this.state.streamTimer)
 
     fetch(url).then(res => res.json()).then(data => {
-      console.log("Start")
-      console.log(data.block_number)
-      console.log(this.state.current_block)
-      console.log("END")
       if (parseInt(data.block_number) !== parseInt(this.state.current_block)) {
 
         this.setState({ shouldRedraw: true })
@@ -369,46 +365,22 @@ class Inklin extends React.Component {
         this.setState({ shouldRedraw: false })
 
         console.log(`Got ${data.edges.length} results`);
-        console.log(data.nodes);
         this.setState({ data: data })
       } else {
         console.log("Still Waiting");
       }
 
-        const streamTimer = setInterval(() => {
-          this.stream()
-//  //        this.state.network.fit({animation:true})
-        }, 5000);
+//         const streamTimer = setInterval(() => {
+//           this.stream()
+// //  //        this.state.network.fit({animation:true})
+//         }, 5000);
 
-      this.setState({ streamTimer: streamTimer })
+   //   this.setState({ streamTimer: streamTimer })
     });
 
   }
 
 
-  // Handle Drawer actions
-
-  reloadData = () => {
-    clearInterval(this.state.streamTimer)
-
-    this.setState({ FG2DIsHidden: !this.state.FG2DIsHidden, FG3DIsHidden: !this.state.FG3DIsHidden, current_block: 0 }, this.stream)
-
-  }
-
-  switchTo3d = () => {
-    console.log("Handle Perspective")
-    const data = this.state.data
-
-    this.setState({
-      data: {
-        nodes: [{ id: 0 }, { id: 1 }],
-        links: []
-      }
-    }, this.reloadData)
-
-
-
-  }
 
   hideVolume = () => {
     this.setState({ volumeIsHidden: !this.state.volumeIsHidden })
@@ -420,53 +392,7 @@ class Inklin extends React.Component {
     this.setState({ isLive: !this.state.isLive })
   }
 
-  handleDrawer = action => {
-    switch (action) {
-      case "live":
-
-        this.setState({
-          data: {
-            nodes: [{ id: 0 }, { id: 1 }],
-            links: []
-          },
-          isLive: true
-        })
-
-        console.log("Handle Live")
-
-        this.stream()
-
-        break;
-      case "perspective":
-        console.log("Handle Perspective")
-        const data = this.state.data
-        console.log(data)
-        this.setState({
-          data: {
-            nodes: [{ id: 0 }, { id: 1 }],
-            links: []
-          }
-        })
-
-
-        this.setState({ FG2DIsHidden: !this.state.FG2DIsHidden, FG3DIsHidden: !this.state.FG3DIsHidden })
-        // if (!this.state.FG2DIsHidden) {
-        //   clearInterval(this.state.cameraOrbit);
-        // }
-
-        !this.state.FG3DIsHidden ? clearInterval(this.state.cameraOrbit) : console.log("Going 3D...")
-
-        //this.getAll(this.state.address)
-
-        break;
-      case "volume":
-        this.setState({ volumeIsHidden: !this.state.volumeIsHidden })
-        break;
-
-    }
-
-    console.log(action)
-  }
+ 
 
   componentDidMount() {
 
@@ -486,69 +412,10 @@ class Inklin extends React.Component {
 
       this.stream()
     }
-    // const distance = 600;
 
-    // this.fg.cameraPosition({ z: distance });
-    // // camera orbit
-    // let angle = 0;
-    // const cameraOrbit = setInterval(() => {
-    //   this.fg.cameraPosition({
-    //     x: distance * Math.sin(angle),
-    //     z: distance * Math.cos(angle)
-    //   });
-    //   angle += Math.PI / 300;
-    // }, 10);
-
-    // this.setState({ cameraOrbit: cameraOrbit })
   }
 
-  nodeClicked3d = node => {
-    clearInterval(this.state.cameraOrbit);
-
-    ReactGA.event({
-      category: 'Graph',
-      action: 'Click',
-      label: node.id
-    });
-
-    this.setState({ address: node.id })
-    // Aim at node from outside it
-    const distance = 100;
-    const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
-    this.fg.cameraPosition(
-      { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio }, // new position
-      node, // lookAt ({ x, y, z })
-      3000  // ms transition duration
-    );
-  };
-
-  nodeClicked2d = node => {
-    clearInterval(this.state.cameraOrbit);
-    if (this.fg.zoom() === 2) {
-      ReactGA.event({
-        category: 'Graph',
-        action: 'Double Click',
-        label: node.id
-      });
-      this.setState({ address: node.id })
-      this.fg.zoom(1, 100);
-      this.getAll(node.id)
-
-    } else {
-      ReactGA.event({
-        category: 'Graph',
-        action: 'Click',
-        label: node.id
-      });
-
-      this.setState({ address: node.id })
-      // Aim at node from outside it
-      this.fg.centerAt(node.x, node.y, 1000);
-      this.fg.zoom(2, 2000);
-    }
-  };
-
-
+ 
 
 
   closeSnackbar = () => {
@@ -561,6 +428,14 @@ class Inklin extends React.Component {
     const { data, highlightLink } = this.state;
     
     
+    var events = {
+      select: function(event) {
+          var { nodes, edges } = event;
+          console.log(nodes);
+          console.log(edges);
+      }
+  }
+
     const options = {
       nodes: {
           shape: 'dot',
@@ -588,18 +463,19 @@ class Inklin extends React.Component {
           {/* {!this.state.menuIsHidden && <MenuAppBar onLuis={this.handleLuis} onSpeak={this.handleSpeak} placeholder={this.state.placeholder} />} */}
           {!this.state.menuIsHidden && <MiniDrawer handleLive={this.handleLive} handleVolume={this.hideVolume} switchTo3d={this.switchTo3d} perspective2d={!this.state.FG3DIsHidden} showVolume={!this.state.volumeIsHidden} isLive={this.state.isLive} currentBlock={this.state.current_block} />}
 
-         {this.state.data.edges.length > 0 && <Graph getNetwork={network => this.setState({network}) } graph={this.state.data} options={options}  />}
-
-
+         {this.state.data.edges.length > 0 && <Graph getNetwork={network => this.setState({network}) } graph={this.state.data} events={events} options={options}  />}
 
           {this.state.displayProgress && <ProgressIndicator />}
 
           <SearchDialog open={this.state.showSearch} closeDrawer={this.handleCloseSearch} />
+          {/* <div className="leftpanel">
+
+          </div> */}
           <div className="rightpanel">
+          {!this.state.volumeIsHidden &&<VolumeChart data={this.state.volume_data} options={this.state.volume_options} shouldRedraw={this.state.shouldRedraw} />}
             <SearchField handleFocus={this.props.handleFocus} handleLuis={this.handleLuis} />
-            {!this.state.volumeIsHidden &&<VolumeChart data={this.state.volume_data} options={this.state.volume_options} shouldRedraw={this.state.shouldRedraw} />}
             <Info block_time={this.state.block_time} block_info={this.state.block_info} address={this.state.address} numberoftxs={this.state.numberoftxs} blocknumber={this.state.current_block} />
-            <History />
+           {this.state.current_block > 0 && <History current_block={this.state.current_block}/>}
           </div>
           {!this.state.menuIsHidden && <div className="buildInfo">
             Build: {process.env.REACT_APP_SHA}

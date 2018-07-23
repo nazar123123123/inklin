@@ -101,6 +101,18 @@ body {
   width: 20%;
 }
 
+
+.loading {
+  margin: 20px;
+}
+
+.leftpanel {
+  position: absolute;
+
+  left: 80px;
+  width: 20%;
+}
+
 .datepicker input{
   font-size: 0.8em;
 }

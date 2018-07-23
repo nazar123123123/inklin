@@ -435,6 +435,37 @@ app.get('/api/inklin/search/:term', function (req, res) {
 	});
 });
 
+app.get('/api/inklin/history/:currentblock', function (req, res) {
+
+	client.trackNodeHttpRequest({request: req, response: res}); 
+	
+	if ("MONGODB" in process.env) {
+		mongoose.connect(process.env["MONGODB"]);
+	} else {
+		mongoose.connect('mongodb://localhost:27017/visualise_ethereum');
+	}
+
+	// Handle the connection event
+	var db = mongoose.connection;
+	db.on('error', console.error.bind(console, 'connection error:'));
+
+	db.once('open', function () {
+		console.log("DB connection alive");
+	});
+
+	console.log(`Requesting history before ${req.params.currentblock}`);
+		Transaction.distinct("block_number", {"block_number": {"$lte": req.params.currentblock, "$gte": parseInt(req.params.currentblock) - 20}}, function (err, blocks) {
+			console.log(blocks);
+			res.json(blocks);
+		//	db.close();
+
+		})     
+
+
+});
+
+
+
 
 app.get('/api/inklin/stats', function (req, res) {
 
