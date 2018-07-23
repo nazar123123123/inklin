@@ -12,6 +12,8 @@ events.on("push", (brigadeEvent, project) => {
     const today = new Date()
    
     const gitSHA = brigadeEvent.revision.commit.substr(0, 7)
+    console.log("TYPEOF:")
+    console.log(typeof(brigadeEvent.revision.commit))
     const imageTag = String(gitSHA)
  
     // The good stuff
