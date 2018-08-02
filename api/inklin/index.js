@@ -382,6 +382,47 @@ app.get('/api/inklin/like/:block', function (req, res) {
 
 }); 
 
+
+app.get('/api/inklin/tokens/:block', function (req, res) {
+
+
+
+if ("MONGODB" in process.env) {
+	mongoose.connect(process.env["MONGODB"]);
+} else {
+	mongoose.connect('mongodb://localhost:27017/visualise_ethereum');
+}
+
+// Handle the connection event
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+
+db.once('open', function () {
+	console.log("DB connection alive");
+});
+
+	Transaction.aggregate([
+		{ $match: { "block_number": req.params.block} },
+		{
+			$group: {
+				'_id': "$to",
+				count: { $sum: 1 }
+
+			}
+		}
+	], function (err, result) {
+		if (err) {
+			console.log(err);
+			return;
+		}
+
+		res.json(result)
+	});
+
+})
+
+
+
 app.get('/api/inklin/histogram/:address', function (req, res) {
 
 	Transaction.aggregate([
@@ -494,4 +535,4 @@ app.get('/api/inklin/stats', function (req, res) {
 
 //module.exports = createAzureFunctionHandler(app);
 
-app.listen(80, () => console.log('API listening on port 80\!'))
+app.listen(7071, () => console.log('API listening on port 80\!'))
