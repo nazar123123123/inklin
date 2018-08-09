@@ -35,6 +35,8 @@ spec:
         env:
         - name: MONGODB
           value: "mongodb://mongo-mongodb:27017/visualise_ethereum"
+        - name: PORT
+          value: "{{.Values.port}}"
         resources:
           requests:
             cpu: "100m"
