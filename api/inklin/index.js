@@ -534,4 +534,4 @@ app.get('/api/inklin/stats', function (req, res) {
 
 //module.exports = createAzureFunctionHandler(app);
 
-app.listen(7071, () => console.log('API listening on port 80\!'))
+app.listen(80, () => console.log('API listening on port 80\!'))
