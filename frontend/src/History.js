@@ -7,27 +7,22 @@ class History extends React.Component {
   constructor(props) {
    super(props);
    this.state = {
-      items: {},
+      items: [],
       loadingState: false
     };
+
+    console.log("Current Block");
+    console.log(this.props.current_block);
   }
 
   componentDidMount() {
-    this.refs.iScroll.addEventListener("scroll", () => {
-      if (this.refs.iScroll.scrollTop + this.refs.iScroll.clientHeight >=this.refs.iScroll.scrollHeight){
-        this.loadMoreItems();
-      }
-    });
-  }
+    this.loadMoreItems();
 
-  displayItems() {
-    var items = [];
-    console.log("Displaying these items....");
-    for (var i = 0; i < this.state.items; i++) {
-        console.log(this.state.items[i]);
-      items.push(<ListItem><ListItemText primary={this.state.items[i]} /></ListItem>);
-    }
-    return items;
+    this.refs.iScroll.addEventListener("scroll", () => {
+     // if (this.refs.iScroll.scrollTop + this.refs.iScroll.clientHeight >=this.refs.iScroll.scrollHeight){
+        this.loadMoreItems();
+     // }
+    });
   }
 
   loadMoreItems() {
@@ -38,7 +33,7 @@ class History extends React.Component {
     fetch(url).then(res => res.json()).then(data => {
           console.log(data);
           this.setState({ items: data, loadingState: false });
-      });
+    });
 
     // setTimeout(() => {
     //   this.setState({ items: this.state.items + 10, loadingState: false });
@@ -49,7 +44,10 @@ class History extends React.Component {
     return (
       <div className="history" ref="iScroll" style={{ height: "200px", overflow: "auto" }}>
         <List>
-          {this.displayItems()}
+          {this.state.items.map(item => (
+              <ListItem key={`block-${item}`}>
+                <ListItemText primary={`Block ${item}`}  secondary={"Some text"}/>
+          </ListItem>))}
         </List>
         {this.state.loadingState ? <p className="loading"> Loading More Items..</p> : ""}
 
