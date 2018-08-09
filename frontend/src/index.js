@@ -14,6 +14,7 @@ import MiniDrawer from './MiniDrawer'
 import ProgressIndicator from './ProgressIndicator'
 import ReactGA from 'react-ga';
 import History from './History'
+import { Helmet } from "react-helmet";
 
 import './index.css';
 
@@ -32,11 +33,11 @@ const theme = createMuiTheme({
 //const  {ForceGraph2D, ForceGraph3D}  = ForceGraph
 
 class Inklin extends React.Component {
-  
+
   static NODE_R = 8;
 
   constructor(props) {
-    
+
     super(props);
     this.handleLuis = this.handleLuis.bind(this);
     this.handleSpeak = this.handleSpeak.bind(this);
@@ -366,12 +367,12 @@ class Inklin extends React.Component {
         console.log("Still Waiting");
       }
 
-        const streamTimer = setInterval(() => {
-          this.stream()
-        
-        }, 5000);
+      const streamTimer = setInterval(() => {
+        this.stream()
 
-     this.setState({ streamTimer: streamTimer })
+      }, 5000);
+
+      this.setState({ streamTimer: streamTimer })
     });
 
   }
@@ -396,7 +397,7 @@ class Inklin extends React.Component {
     this.setState({ isLive: !this.state.isLive })
   }
 
- 
+
 
   componentDidMount() {
 
@@ -419,7 +420,7 @@ class Inklin extends React.Component {
 
   }
 
- 
+
 
 
   closeSnackbar = () => {
@@ -430,61 +431,67 @@ class Inklin extends React.Component {
   render() {
     //    const { data } = this.state;
     const { data, highlightLink } = this.state;
-    
-    
+
+
     var events = {
-      select: function(event) {
-          var { nodes, edges } = event;
-          console.log(nodes);
-          console.log(edges);
+      select: function (event) {
+        var { nodes, edges } = event;
+        console.log(nodes);
+        console.log(edges);
       }
-  }
+    }
 
     const options = {
       nodes: {
-          shape: 'dot',
-          size: 16
+        shape: 'dot',
+        size: 16
       },
       physics: {
         enabled: true,
-          forceAtlas2Based: {
-              gravitationalConstant: -106,
-              centralGravity: 0.005,
-              springLength: 230,
-              springConstant: 0.18
-          },
-          maxVelocity: 50,
-          solver: 'forceAtlas2Based',
-          timestep: 1,
-          stabilization: false
+        forceAtlas2Based: {
+          gravitationalConstant: -106,
+          centralGravity: 0.005,
+          springLength: 230,
+          springConstant: 0.18
+        },
+        maxVelocity: 50,
+        solver: 'forceAtlas2Based',
+        timestep: 1,
+        stabilization: false
       }
-  };    
+    };
     return (
 
 
- 
-        <MuiThemeProvider theme={theme}>
-          <div className="leftpanel">
-            {!this.state.volumeIsHidden &&<VolumeChart data={this.state.volume_data} options={this.state.volume_options} shouldRedraw={this.state.shouldRedraw} />}
-          </div> 
 
-          {/* {!this.state.menuIsHidden && <MenuAppBar onLuis={this.handleLuis} onSpeak={this.handleSpeak} placeholder={this.state.placeholder} />} */}
-          {!this.state.menuIsHidden && <MiniDrawer handleLive={this.handleLive} handleVolume={this.hideVolume} handleSearch={this.hideSearch} handleStats={this.hideStats} showVolume={!this.state.volumeIsHidden} showStats={!this.state.statsIsHidden} showSearch={!this.state.searchIsHidden} isLive={this.state.isLive} currentBlock={this.state.current_block} />}
+      <MuiThemeProvider theme={theme}>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>Ethereum - ETH - Blockchain Visualisation</title>
+          <meta name="keywords" content="ethereum, explorer, eth, search, blockchain, crypto, currency, visualisation" />
+        </Helmet>
 
-         {this.state.data.edges.length > 0 && <Graph getNetwork={network => this.setState({network}) } graph={this.state.data} events={events} options={options}  />}
+        <div className="leftpanel">
+          {!this.state.volumeIsHidden && <VolumeChart data={this.state.volume_data} options={this.state.volume_options} shouldRedraw={this.state.shouldRedraw} />}
+        </div>
 
-          {this.state.displayProgress && <ProgressIndicator />}
+        {/* {!this.state.menuIsHidden && <MenuAppBar onLuis={this.handleLuis} onSpeak={this.handleSpeak} placeholder={this.state.placeholder} />} */}
+        {!this.state.menuIsHidden && <MiniDrawer handleLive={this.handleLive} handleVolume={this.hideVolume} handleSearch={this.hideSearch} handleStats={this.hideStats} showVolume={!this.state.volumeIsHidden} showStats={!this.state.statsIsHidden} showSearch={!this.state.searchIsHidden} isLive={this.state.isLive} currentBlock={this.state.current_block} />}
 
-          <SearchDialog open={this.state.showSearch} closeDrawer={this.handleCloseSearch} />
-          <div className="rightpanel">
-           {!this.state.searchIsHidden && <SearchField handleFocus={this.props.handleFocus} handleLuis={this.handleLuis} /> }
-           {!this.state.statsIsHidden &&  <Info block_time={this.state.block_time} block_info={this.state.block_info} address={this.state.address} numberoftxs={this.state.numberoftxs} blocknumber={this.state.current_block} /> }
-           {/* {this.state.current_block > 0 && <History current_block={this.state.current_block}/>} */}
-          </div>
-          {!this.state.menuIsHidden && <div className="buildInfo">
-            Build: {process.env.REACT_APP_SHA}
-          </div>}
-        </MuiThemeProvider>
+        {this.state.data.edges.length > 0 && <Graph getNetwork={network => this.setState({ network })} graph={this.state.data} events={events} options={options} />}
+
+        {this.state.displayProgress && <ProgressIndicator />}
+
+        <SearchDialog open={this.state.showSearch} closeDrawer={this.handleCloseSearch} />
+        <div className="rightpanel">
+          {!this.state.searchIsHidden && <SearchField handleFocus={this.props.handleFocus} handleLuis={this.handleLuis} />}
+          {!this.state.statsIsHidden && <Info block_time={this.state.block_time} block_info={this.state.block_info} address={this.state.address} numberoftxs={this.state.numberoftxs} blocknumber={this.state.current_block} />}
+          {this.state.current_block > 0 && <History current_block={this.state.current_block}/>}
+        </div>
+        {!this.state.menuIsHidden && <div className="buildInfo">
+          Build: {process.env.REACT_APP_SHA}
+        </div>}
+      </MuiThemeProvider>
 
     );
   }

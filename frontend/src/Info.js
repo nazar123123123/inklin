@@ -32,7 +32,7 @@ class Info extends React.Component {
       <div className="infoPane">
         <List>
         <ListItem>
-            <ListItemText primary="Stats " secondary={stats} />
+            <ListItemText primary="Statistics " secondary={stats} />
           </ListItem>
 
           <ListItem>
