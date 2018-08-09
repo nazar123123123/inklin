@@ -27,7 +27,7 @@ class Info extends React.Component {
     
   render() {
 
-    const stats = `${this.props.block_info.tokens} token transactions, ${this.props.block_info.contracts} contracts created, Ξ${parseInt(this.props.block_info.ethvalue)} transferred`
+    const stats = `${this.props.block_info.tokens} ERC20 transactions, ${this.props.block_info.contracts} contracts created, Ξ${parseInt(this.props.block_info.ethvalue)} transferred`
     return (
       <div className="infoPane">
         <List>
