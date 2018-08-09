@@ -36,7 +36,7 @@ spec:
         - name: MONGODB
           value: "mongodb://mongo-mongodb:27017/visualise_ethereum"
         - name: PORT
-          value: "{{.Values.port}}"
+          value: {{.Values.port}}
         resources:
           requests:
             cpu: "100m"

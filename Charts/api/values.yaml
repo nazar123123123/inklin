@@ -3,4 +3,4 @@
 replicaCount: 1
 image: "inklin.azurecr.io/api"
 imageTag: "d415bd1"
-port: "80"
+port: 80
