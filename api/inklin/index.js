@@ -495,11 +495,10 @@ app.get('/api/inklin/history/:currentblock', function (req, res) {
 	});
 
 	console.log(`Requesting history before ${req.params.currentblock}`);
-		Transaction.distinct("block_number", {"block_number": {"$lte": req.params.currentblock, "$gte": parseInt(req.params.currentblock) - 20}}, function (err, blocks) {
+		Transaction.distinct("block_number", {"block_number": {"$lt": req.params.currentblock, "$gt": parseInt(req.params.currentblock) - 20}}, function (err, blocks) {
 			console.log(blocks);
 			res.json(blocks);
 		//	db.close();
-
 		})     
 
 
