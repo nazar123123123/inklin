@@ -90,7 +90,7 @@ app.get('/api/inklin/live/:lastblock', function (req, res) {
 	client.trackNodeHttpRequest({request: req, response: res}); 
 	
 	if ("MONGODB" in process.env) {
-		mongoose.connect(process.env["MONGODB"]);
+		mongoose.connect(process.env["MONGODB"], { useNewUrlParser: true });
 	} else {
 		mongoose.connect('mongodb://localhost:27017/visualise_ethereum', { useNewUrlParser: true });
 	}
