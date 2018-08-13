@@ -6,3 +6,8 @@ calculate_import/env
 inklin.yaml
 kubernetes/shotter/shotter.yml
 env/
+terraform/aks.tf
+terraform/init_cluster.sh
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/.terraform
