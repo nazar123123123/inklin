@@ -137,9 +137,10 @@ body {
   background-color: black;
 }
 
-.history a {
+/* .history a {
   text-decoration: none;
-}
+} */
+
 .searchElement {
   padding: 10px;
 }
