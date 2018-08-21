@@ -27,11 +27,9 @@ const theme = createMuiTheme({
   },
 });
 
-//const  {ForceGraph2D, ForceGraph3D}  = ForceGraph
 
 class Inklin extends React.Component {
 
-  static NODE_R = 8;
 
   constructor(props) {
 
