@@ -1,8 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import { ForceGraph3D } from 'react-force-graph'
-// import { ForceGraph2D } from 'react-force-graph'
-// import {ForceGraph, ForceGraphNode, ForceGraphLink} from 'react-vis-force';
 import Graph from 'react-graph-vis';
 import MenuAppBar from './MenuAppBar'
 import SearchField from './SearchField'
