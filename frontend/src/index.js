@@ -48,6 +48,8 @@ class Inklin extends React.Component {
     this.handleContractChooserClose = this.handleContractChooserClose.bind(this);
 
     this.state = {
+      pagetitle: "Inklin Ethereum - ETH - Blockchain Visualisation",
+      pagedescription: "Ethereum - ETH - Blockchain Visualisation and Analysis tool",
       network: {},
       block_info: {},
       isLive: true,
@@ -272,6 +274,8 @@ class Inklin extends React.Component {
 
   getAll(address) {
 
+    this.setState({pagetitle: `Ethereum Address ${address} visualisation`})
+
     clearInterval(this.state.streamTimer)
 
     this.setState({
@@ -288,8 +292,7 @@ class Inklin extends React.Component {
 
     console.log(data_url)
     fetch(data_url).then(res => res.json()).then(data => {
-      this.setState({ data: data.docs, displayProgress: false, numberoftxs: data.length })
-
+      this.setState({ data: data.docs, displayProgress: false, numberoftxs: data.length, pagedescription: `Analysis of Ethereum address ${address} with ${data.length} transactions associated with it` })
     });
 
     const histogram_url = `${process.env.REACT_APP_API_SERVER}/api/inklin/histogram/${address}`
@@ -325,7 +328,7 @@ class Inklin extends React.Component {
 
 
   getBlock(block) {
-
+    this.setState({pagetitle: `Ethereum Block ${block} visualisation`})
     console.log("In getBlock")
     clearInterval(this.state.streamTimer)
 
@@ -333,17 +336,47 @@ class Inklin extends React.Component {
       data: {
         nodes: [],
         edges: []
-      }, displayProgress: true, isLive: false, volumeIsHidden: true
+      }, displayProgress: true, isLive: false, volumeIsHidden: false
     })
 
     const data_url = `${process.env.REACT_APP_API_SERVER}/api/inklin/transactions/${block}`
     console.log(data_url)
-    const nodes = []
-    const links = []
 
     fetch(data_url).then(res => res.json()).then(data => {
-      this.setState({ data: data, displayProgress: false, current_block: data.block_number, numberoftxs: data.edges.length })
+      this.setState({ data: data, displayProgress: false, current_block: data.block_number, numberoftxs: data.edges.length, pagedescription: `Analysis of Ethereum Block ${block} containing ${data.edges.length} transactions` })
     });
+
+
+    //TODO: Import the volume count for SEO
+    
+    const history_url = `${process.env.REACT_APP_API_SERVER}/api/inklin/history/${block}`
+
+    console.log(history_url)
+    fetch(history_url).then(res => res.json()).then(data => {
+
+
+      const vd = {
+        labels: [],
+        datasets: [
+          {
+            label: 'tx/block',
+            backgroundColor: '#40c4ff',
+            borderWidth: 1,
+            data: []
+          }
+        ]
+      }
+
+      for (var i in data) {
+        vd.labels.push(data[i]._id.block_number)
+        vd.datasets[0].data.push(data[i].no)
+      }
+
+      
+      this.setState({ volume_data: vd, shouldRedraw: true })
+    });
+
+
 
   }
 
@@ -410,6 +443,9 @@ class Inklin extends React.Component {
     if (searchTerm.length === 42) {
       this.setState({ address: searchTerm })
       this.getAll(searchTerm)
+    }  else  if (!isNaN(parseFloat(searchTerm)) && isFinite(searchTerm)) {
+      this.setState({ current_block: searchTerm })
+      this.getBlock(searchTerm)
     } else {
       if (myURL.hash === "#share") {
         this.setState({ volumeIsHidden: true, menuIsHidden: true, infoIsHidden: true, searchIsHidden: true, statsIsHidden: true })
@@ -467,7 +503,7 @@ class Inklin extends React.Component {
       <MuiThemeProvider theme={theme}>
         <Helmet>
           <meta charSet="utf-8" />
-          <title>Ethereum - ETH - Blockchain Visualisation</title>
+          <title>{this.state.pagetitle}</title>
           <meta name="keywords" content="ethereum, explorer, eth, search, blockchain, crypto, currency, visualisation" />
         </Helmet>
 

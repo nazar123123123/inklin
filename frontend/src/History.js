@@ -46,10 +46,11 @@ class History extends React.Component {
         <List>
           {this.state.items.map(item => (
               <ListItem key={`block-${item}`}>
-                <ListItemText primary={`Block ${item}`}  secondary={"Some text"}/>
+              <a href={"/" + item._id.block_number}>
+                <ListItemText primary={`Block ${item._id.block_number}`}  secondary={`${item.no} transactions`}/>
+                </a>
           </ListItem>))}
         </List>
-        {this.state.loadingState ? <p className="loading"> Loading More Items..</p> : ""}
 
       </div>
     );

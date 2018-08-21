@@ -22,27 +22,27 @@ var Favourite = require('./app/models/Favourite');
 const app = express();
 
 function getColor(maxval, minval, val, moreisgood) {
-    var intnsty = (val - minval) / (maxval - minval);
-    var r, g;
-    if (moreisgood) {
-        if (intnsty > 0.5) {
-            g = 255;
-            r = Math.round(2 * (1 - intnsty) * 255);
-        } else {
-            r = 255;
-            g = Math.round(2 * intnsty * 255);
-        }
+	var intnsty = (val - minval) / (maxval - minval);
+	var r, g;
+	if (moreisgood) {
+		if (intnsty > 0.5) {
+			g = 255;
+			r = Math.round(2 * (1 - intnsty) * 255);
+		} else {
+			r = 255;
+			g = Math.round(2 * intnsty * 255);
+		}
 
-    } else { //lessisgood
-        if (intnsty > 0.5) {
-            r = 255;
-            g = Math.round(2 * (1 - intnsty) * 255);
-        } else {
-            g = 255;
-            r = Math.round(2 * intnsty * 255);
-        }
-    }
-    return "rgb(" + r.toString() + ", " + g.toString() + ", 0)";
+	} else { //lessisgood
+		if (intnsty > 0.5) {
+			r = 255;
+			g = Math.round(2 * (1 - intnsty) * 255);
+		} else {
+			g = 255;
+			r = Math.round(2 * intnsty * 255);
+		}
+	}
+	return "rgb(" + r.toString() + ", " + g.toString() + ", 0)";
 }
 
 
@@ -55,8 +55,8 @@ app.use(function (req, res, next) {
 
 app.get('/api/inklin/transactions/:block', function (req, res) {
 
-	client.trackNodeHttpRequest({request: req, response: res}); 
-	
+	client.trackNodeHttpRequest({ request: req, response: res });
+
 	if ("MONGODB" in process.env) {
 		mongoose.connect(process.env["MONGODB"]);
 	} else {
@@ -87,8 +87,8 @@ app.get('/api/inklin/transactions/:block', function (req, res) {
 
 app.get('/api/inklin/live/:lastblock', function (req, res) {
 
-	client.trackNodeHttpRequest({request: req, response: res}); 
-	
+	client.trackNodeHttpRequest({ request: req, response: res });
+
 	if ("MONGODB" in process.env) {
 		mongoose.connect(process.env["MONGODB"], { useNewUrlParser: true });
 	} else {
@@ -108,10 +108,10 @@ app.get('/api/inklin/live/:lastblock', function (req, res) {
 		Transaction.find({ "block_number": { "$gt": req.params.lastblock } }, function (err, transactions) {
 			results = getForceGraph(transactions);
 
-			
-			if (results.nodes.length > 0) {			
-				results.block_time = transactions[transactions.length -1].block_time
-				results.block_number = transactions[transactions.length -1].block_number
+
+			if (results.nodes.length > 0) {
+				results.block_time = transactions[transactions.length - 1].block_time
+				results.block_number = transactions[transactions.length - 1].block_number
 			} else {
 				results.block_number = req.params.lastblock
 			}
@@ -119,7 +119,7 @@ app.get('/api/inklin/live/:lastblock', function (req, res) {
 			res.json(results);
 			db.close();
 
-		});     
+		});
 	} else {
 		Transaction.find({}, function (err, transactions) {
 			if (err)
@@ -127,10 +127,10 @@ app.get('/api/inklin/live/:lastblock', function (req, res) {
 
 			Transaction.find({ "block_number": transactions[0]["block_number"] }, function (err, tx) {
 				results = getForceGraph(tx)
-		
+
 				results.block_number = tx[0].block_number
 				results.block_time = tx[0].block_time
-				client.trackMetric({name: "Transactions", value: tx.length});
+				client.trackMetric({ name: "Transactions", value: tx.length });
 
 				res.json(results);
 				db.close();
@@ -148,19 +148,19 @@ app.get('/api/inklin/live/:lastblock', function (req, res) {
 app.get('/api/inklin/transactions/:from/:to', function (req, res) {
 
 
-if ("MONGODB" in process.env) {
-	mongoose.connect(process.env["MONGODB"]);
-} else {
-	mongoose.connect('mongodb://localhost:27017/visualise_ethereum');
-}
+	if ("MONGODB" in process.env) {
+		mongoose.connect(process.env["MONGODB"]);
+	} else {
+		mongoose.connect('mongodb://localhost:27017/visualise_ethereum');
+	}
 
-// Handle the connection event
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+	// Handle the connection event
+	var db = mongoose.connection;
+	db.on('error', console.error.bind(console, 'connection error:'));
 
-db.once('open', function () {
-	console.log("DB connection alive");
-});
+	db.once('open', function () {
+		console.log("DB connection alive");
+	});
 
 	from = new Date(req.params.from)
 	to = new Date(req.params.to)
@@ -194,7 +194,7 @@ function getForceGraph(results) {
 
 	for (t in results) {
 		const value = results[t]["value"];
-		
+
 		if (value != null) {
 			values.push(parseInt(value))
 		}
@@ -203,7 +203,7 @@ function getForceGraph(results) {
 
 
 	for (t in results) {
-		
+
 		const from = results[t]["from"];
 		const value = results[t]["value"];
 
@@ -260,14 +260,14 @@ function getForceGraph(results) {
 	for (i in tmp_nodes) {
 		//const color = getColor(Math.max(...values), Math.min(...values), values[i], false)
 		//const color = getColor((parseInt(value) - Math.min(...values)) / (Math.max(...values) - Math.min(...values)))
-		nodes.push({ id: tmp_nodes[i], color: "white", title: tmp_nodes[i]  })
+		nodes.push({ id: tmp_nodes[i], color: "white", title: tmp_nodes[i] })
 	}
 
 	for (i in tokens) {
 		nodes.push({ id: tokens[i], color: "#2aaee2", title: tokens[i] })
 	}
 
-	const edges  = links
+	const edges = links
 	results = { nodes, edges }
 	results.stats = stats
 	return results
@@ -338,8 +338,8 @@ function getForceGraphLive(results) {
 
 app.get('/api/inklin/txaddress/:address', function (req, res) {
 
-	client.trackNodeHttpRequest({request: req, response: res}); 
-	
+	client.trackNodeHttpRequest({ request: req, response: res });
+
 	if ("MONGODB" in process.env) {
 		mongoose.connect(process.env["MONGODB"]);
 	} else {
@@ -360,7 +360,7 @@ app.get('/api/inklin/txaddress/:address', function (req, res) {
 		console.log(results);
 		if (err)
 			console.log(err)
-			//res.send(err);
+		//res.send(err);
 
 		results.docs = getForceGraph(results.docs)
 		res.json(results);
@@ -380,29 +380,29 @@ app.get('/api/inklin/like/:block', function (req, res) {
 		}
 	});
 
-}); 
+});
 
 
 app.get('/api/inklin/tokens/:block', function (req, res) {
 
 
 
-if ("MONGODB" in process.env) {
-	mongoose.connect(process.env["MONGODB"]);
-} else {
-	mongoose.connect('mongodb://localhost:27017/visualise_ethereum');
-}
+	if ("MONGODB" in process.env) {
+		mongoose.connect(process.env["MONGODB"]);
+	} else {
+		mongoose.connect('mongodb://localhost:27017/visualise_ethereum');
+	}
 
-// Handle the connection event
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+	// Handle the connection event
+	var db = mongoose.connection;
+	db.on('error', console.error.bind(console, 'connection error:'));
 
-db.once('open', function () {
-	console.log("DB connection alive");
-});
+	db.once('open', function () {
+		console.log("DB connection alive");
+	});
 
 	Transaction.aggregate([
-		{ $match: { "block_number": req.params.block} },
+		{ $match: { "block_number": req.params.block } },
 		{
 			$group: {
 				'_id': "$to",
@@ -420,6 +420,9 @@ db.once('open', function () {
 	});
 
 })
+
+
+
 
 
 
@@ -478,8 +481,8 @@ app.get('/api/inklin/search/:term', function (req, res) {
 
 app.get('/api/inklin/history/:currentblock', function (req, res) {
 
-	client.trackNodeHttpRequest({request: req, response: res}); 
-	
+	client.trackNodeHttpRequest({ request: req, response: res });
+
 	if ("MONGODB" in process.env) {
 		mongoose.connect(process.env["MONGODB"]);
 	} else {
@@ -494,12 +497,17 @@ app.get('/api/inklin/history/:currentblock', function (req, res) {
 		console.log("DB connection alive");
 	});
 
+
 	console.log(`Requesting history before ${req.params.currentblock}`);
-		Transaction.distinct("block_number", {"block_number": {"$lt": req.params.currentblock, "$gt": parseInt(req.params.currentblock) - 20}}, function (err, blocks) {
-			console.log(blocks);
-			res.json(blocks);
+
+	Transaction.aggregate([
+		{ $match: { "block_number": { "$lt": parseInt(req.params.currentblock), "$gt": parseInt(req.params.currentblock) - 50 } } },
+		{ $group: { _id: { block_number: '$block_number' }, no: { $sum: 1 } } }
+	], function (err, just_blocks) {
+		console.log(just_blocks);
+		res.json(just_blocks);
 		//	db.close();
-		})     
+	})
 
 
 });
