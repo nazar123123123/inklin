@@ -11,3 +11,4 @@ terraform/init_cluster.sh
 terraform/terraform.tfstate
 terraform/terraform.tfstate.backup
 terraform/.terraform
+snippets/*.xml

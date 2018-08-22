@@ -287,7 +287,7 @@ class Inklin extends React.Component {
 
     console.log(data_url)
     fetch(data_url).then(res => res.json()).then(data => {
-      this.setState({ data: data.docs, displayProgress: false, numberoftxs: data.length, pagedescription: `Analysis of Ethereum address ${address} with ${data.length} transactions associated with it` })
+      this.setState({ data: data.docs, displayProgress: false, numberoftxs: data.length, pagedescription: `Analysis of Ethereum address ${address} with ${data.length} transactions associated with it` }, this.state.network.fit())
     });
 
     const histogram_url = `${process.env.REACT_APP_API_SERVER}/api/inklin/histogram/${address}`
@@ -336,13 +336,18 @@ class Inklin extends React.Component {
 
     const data_url = `${process.env.REACT_APP_API_SERVER}/api/inklin/transactions/${block}`
     console.log(data_url)
-
+    console.log(this.state.network);
     fetch(data_url).then(res => res.json()).then(data => {
       this.setState({ data: data, displayProgress: false, current_block: data.block_number, numberoftxs: data.edges.length, pagedescription: `Analysis of Ethereum Block ${block} containing ${data.edges.length} transactions` })
     });
 
 
-    //TODO: Import the volume count for SEO
+    const streamTimer = setInterval(() => {
+      this.stream()
+        this.state.network.fit({animation:true})
+        clearInterval(streamTimer)
+    }, 2000);
+
     
     const history_url = `${process.env.REACT_APP_API_SERVER}/api/inklin/history/${block}`
 
@@ -437,7 +442,7 @@ class Inklin extends React.Component {
     if (myURL.hash === "#share") {
       this.setState({ volumeIsHidden: true, menuIsHidden: true, infoIsHidden: true, searchIsHidden: true, statsIsHidden: true })
     }
-    
+
     const searchTerm = myURL.pathname.slice(1);
     if (searchTerm.length === 42) {
       this.setState({ address: searchTerm })
@@ -517,7 +522,7 @@ class Inklin extends React.Component {
         <div className="rightpanel">
           {!this.state.searchIsHidden && <SearchField handleFocus={this.props.handleFocus} handleLuis={this.handleLuis} />}
           {!this.state.statsIsHidden && <Info block_time={this.state.block_time} block_info={this.state.block_info} address={this.state.address} numberoftxs={this.state.numberoftxs} blocknumber={this.state.current_block} />}
-          {this.state.current_block > 0 && <History current_block={this.state.current_block}/>}
+          {!this.state.statsIsHidden && this.state.current_block > 0 && <History current_block={this.state.current_block}/>}
         </div>
         {!this.state.menuIsHidden && <div className="buildInfo">
           Build: {process.env.REACT_APP_SHA}
