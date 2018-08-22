@@ -290,7 +290,12 @@ class Inklin extends React.Component {
 
     console.log(data_url)
     fetch(data_url).then(res => res.json()).then(data => {
-      this.setState({ data: data.docs, displayProgress: false, numberoftxs: data.length, pagedescription: `Analysis of Ethereum address ${address} with ${data.length} transactions associated with it` }, this.state.network.fit())
+      this.setState({ data: data.docs, displayProgress: false, numberoftxs: data.length, pagedescription: `Analysis of Ethereum address ${address} with ${data.length} transactions associated with it` })
+      const zoomTimer = setInterval(() => {
+        this.state.network.fit({ animation: true })
+        clearInterval(this.state.zoomTimer)
+      }, 2000);
+  
     });
 
     const histogram_url = `${process.env.REACT_APP_API_SERVER}/api/inklin/histogram/${address}`
