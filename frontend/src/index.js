@@ -434,6 +434,10 @@ class Inklin extends React.Component {
     const myURL = new URL(window.location.href);
     console.log(myURL);
 
+    if (myURL.hash === "#share") {
+      this.setState({ volumeIsHidden: true, menuIsHidden: true, infoIsHidden: true, searchIsHidden: true, statsIsHidden: true })
+    }
+    
     const searchTerm = myURL.pathname.slice(1);
     if (searchTerm.length === 42) {
       this.setState({ address: searchTerm })
@@ -442,10 +446,6 @@ class Inklin extends React.Component {
       this.setState({ current_block: searchTerm })
       this.getBlock(searchTerm)
     } else {
-      if (myURL.hash === "#share") {
-        this.setState({ volumeIsHidden: true, menuIsHidden: true, infoIsHidden: true, searchIsHidden: true, statsIsHidden: true })
-      }
-
       this.stream()
     }
 
