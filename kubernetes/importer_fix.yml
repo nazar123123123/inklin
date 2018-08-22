@@ -1,0 +1,12 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: importerfix
+  labels:
+    app: importerfix
+spec:
+  containers:
+    - name: importerfix
+      image: inklin/importer_live:latest   
+      command: ["/import_transactions.rb"]
+      args: ["force"]

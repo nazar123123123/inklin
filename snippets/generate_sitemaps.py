@@ -15,16 +15,17 @@ for x in range(6191961, 1, -1):
     line = line + "</url>\n"
 
     counter=counter+1
-    if counter == 50000:
+    if counter == 20000:
         counter = 1
 
         file = open(str(filename) + ".xml", "w") 
         file.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-        file.write('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"') 
-        file.write('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"')
+        file.write('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n') 
+        file.write('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"\n')
         file.write('xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">\n')
         file.write(line)
         file.write("</urlset>")
         file.close()
         filename = filename + 1
+        line = ""
     

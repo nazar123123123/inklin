@@ -504,7 +504,6 @@ app.get('/api/inklin/history/:currentblock', function (req, res) {
 		{ $match: { "block_number": { "$lt": parseInt(req.params.currentblock), "$gt": parseInt(req.params.currentblock) - 50 } } },
 		{ $group: { _id: { block_number: '$block_number' }, no: { $sum: 1 } } }
 	], function (err, just_blocks) {
-		console.log(just_blocks);
 		res.json(just_blocks);
 		//	db.close();
 	})

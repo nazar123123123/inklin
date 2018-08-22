@@ -20,6 +20,8 @@ import './index.css';
 ReactGA.initialize('UA-64729178-1');
 ReactGA.pageview(window.location.pathname + window.location.search);
 
+var ReactAI  = require('react-appinsights');
+ReactAI.init({instrumentationKey:'99956a9b-a5c8-41f0-a252-087872ffaf03'});
 
 const theme = createMuiTheme({
   palette: {
