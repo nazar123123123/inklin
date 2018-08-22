@@ -401,7 +401,6 @@ class Inklin extends React.Component {
       }
 
       const zoomTimer = setInterval(() => {
-        this.stream()
         this.state.network.fit({ animation: true })
         clearInterval(this.state.zoomTimer)
       }, 2000);
