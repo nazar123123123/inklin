@@ -400,9 +400,14 @@ class Inklin extends React.Component {
         console.log("Still Waiting");
       }
 
+      const zoomTimer = setInterval(() => {
+        this.stream()
+          this.state.network.fit({animation:true})
+          clearInterval(zoomTimer)
+      }, 2000);
+
       const streamTimer = setInterval(() => {
         this.stream()
-
       }, 5000);
 
       this.setState({ streamTimer: streamTimer })
