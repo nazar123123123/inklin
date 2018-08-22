@@ -34,9 +34,9 @@ function takeshot(block, context) {
         });
 
         console.log(`Navigating to URL: ${block}`);
-        await page.goto("http://inkl.in/" + block + "#share");
+        await page.goto("http://inkl.in/" + block + "#share",{waitUntil: 'networkidle2'});
 
-        await delay(2000);
+        await delay(3000);
 
         process.stdout.write('Taking screenshots: .');
         // const screenshotPromises = [];
@@ -61,22 +61,23 @@ function takeshot(block, context) {
                     console.log(err);
                 } else {
                     console.log(`Upload of '${block}.png' complete`);
+                    context.res =  {
+                        status: 302,
+                        headers: {
+                            Location: `https://inklin.z33.web.core.windows.net/${block}.png`
+                        },
+                        body : {}
+                    }
+                    context.done();
+            
                 }
             });
     
         }); 
         
-
-        await delay(2000);
-        // await Promise.all(screenshotPromises);
-        // console.log(`\nEncoding GIF`);
-        // const encoder = new GIFEncoder(1024, 768);
-        // await pngFileStream(`${workdir}/T*png`)
-        //     .pipe(encoder.createWriteStream({ repeat: 0, delay: 200, quality: 20 }))
-        //     .pipe(fs.createWriteStream(`${req.query.block}.gif`));
         await page.close();
         await browser.close();
-        
+
     })();
 
 }
@@ -107,16 +108,8 @@ module.exports = function (context, req) {
 
                 } else {
                     console.log("File doesn't exist");
-                    takeshot(req.query.block, context)
-                    context.res =  {
-                        status: 302,
-                        headers: {
-                            Location: `https://inklin.z33.web.core.windows.net/${req.query.block}.png`
-                        },
-                        body : {}
-                    }
-                    context.done();
-                
+                     takeshot(req.query.block, context)
+ 
 
                 }
             });

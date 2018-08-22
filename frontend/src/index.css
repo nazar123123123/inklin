@@ -145,6 +145,10 @@ body {
   padding: 10px;
 }
 
+.history a {
+text-decoration: none;
+}
+
 .searchPane {
   opacity: .6;
   padding-right: 10px;

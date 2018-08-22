@@ -14,9 +14,8 @@ for x in range(6191961, 1, -1):
     line = line + "</image:image>\n"
     line = line + "</url>\n"
 
-    print(counter)
     counter=counter+1
-    if counter == 1000:
+    if counter == 50000:
         counter = 1
 
         file = open(str(filename) + ".xml", "w") 

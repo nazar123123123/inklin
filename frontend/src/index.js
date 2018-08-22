@@ -49,6 +49,7 @@ class Inklin extends React.Component {
       block_info: {},
       isLive: true,
       numberoftxs: 0,
+      zoomTimer: 0,
       streamTimer: 0,
       displayProgress: false,
       address: "0x274F3c32C90517975e29Dfc209a23f315c1e5Fc7",
@@ -269,7 +270,7 @@ class Inklin extends React.Component {
 
   getAll(address) {
 
-    this.setState({pagetitle: `Ethereum Address ${address} visualisation`})
+    this.setState({ pagetitle: `Ethereum Address ${address} visualisation` })
 
     clearInterval(this.state.streamTimer)
 
@@ -323,7 +324,7 @@ class Inklin extends React.Component {
 
 
   getBlock(block) {
-    this.setState({pagetitle: `Ethereum Block ${block} visualisation`})
+    this.setState({ pagetitle: `Ethereum Block ${block} visualisation` })
     console.log("In getBlock")
     clearInterval(this.state.streamTimer)
 
@@ -331,51 +332,50 @@ class Inklin extends React.Component {
       data: {
         nodes: [],
         edges: []
-      }, displayProgress: true, isLive: false, volumeIsHidden: false
+      }, displayProgress: true, isLive: false
     })
 
     const data_url = `${process.env.REACT_APP_API_SERVER}/api/inklin/transactions/${block}`
-    console.log(data_url)
-    console.log(this.state.network);
+
     fetch(data_url).then(res => res.json()).then(data => {
       this.setState({ data: data, displayProgress: false, current_block: data.block_number, numberoftxs: data.edges.length, pagedescription: `Analysis of Ethereum Block ${block} containing ${data.edges.length} transactions` })
     });
 
 
-    const streamTimer = setInterval(() => {
-      this.stream()
-        this.state.network.fit({animation:true})
-        clearInterval(streamTimer)
+    const zoomTimer = setInterval(() => {
+      this.state.network.fit({ animation: true })
+      clearInterval(this.state.zoomTimer)
     }, 2000);
 
-    
-    const history_url = `${process.env.REACT_APP_API_SERVER}/api/inklin/history/${block}`
+    this.setState({ zoomTimer: zoomTimer })
 
-    console.log(history_url)
-    fetch(history_url).then(res => res.json()).then(data => {
+    if (this.state.volumeIsHidden) {
+      const history_url = `${process.env.REACT_APP_API_SERVER}/api/inklin/history/${block}`
+
+      fetch(history_url).then(res => res.json()).then(data => {
 
 
-      const vd = {
-        labels: [],
-        datasets: [
-          {
-            label: 'tx/block',
-            backgroundColor: '#40c4ff',
-            borderWidth: 1,
-            data: []
-          }
-        ]
-      }
+        const vd = {
+          labels: [],
+          datasets: [
+            {
+              label: 'tx/block',
+              backgroundColor: '#40c4ff',
+              borderWidth: 1,
+              data: []
+            }
+          ]
+        }
 
-      for (var i in data) {
-        vd.labels.push(data[i]._id.block_number)
-        vd.datasets[0].data.push(data[i].no)
-      }
+        for (var i in data) {
+          vd.labels.push(data[i]._id.block_number)
+          vd.datasets[0].data.push(data[i].no)
+        }
 
-      
-      this.setState({ volume_data: vd, shouldRedraw: true })
-    });
 
+        this.setState({ volume_data: vd, shouldRedraw: true, volumeIsHidden: false })
+      });
+    }
 
 
   }
@@ -402,9 +402,10 @@ class Inklin extends React.Component {
 
       const zoomTimer = setInterval(() => {
         this.stream()
-          this.state.network.fit({animation:true})
-          clearInterval(zoomTimer)
+        this.state.network.fit({ animation: true })
+        clearInterval(this.state.zoomTimer)
       }, 2000);
+      this.setState({ zoomTimer: zoomTimer })
 
       const streamTimer = setInterval(() => {
         this.stream()
@@ -452,7 +453,7 @@ class Inklin extends React.Component {
     if (searchTerm.length === 42) {
       this.setState({ address: searchTerm })
       this.getAll(searchTerm)
-    }  else  if (!isNaN(parseFloat(searchTerm)) && isFinite(searchTerm)) {
+    } else if (!isNaN(parseFloat(searchTerm)) && isFinite(searchTerm)) {
       this.setState({ current_block: searchTerm })
       this.getBlock(searchTerm)
     } else {
@@ -527,7 +528,7 @@ class Inklin extends React.Component {
         <div className="rightpanel">
           {!this.state.searchIsHidden && <SearchField handleFocus={this.props.handleFocus} handleLuis={this.handleLuis} />}
           {!this.state.statsIsHidden && <Info block_time={this.state.block_time} block_info={this.state.block_info} address={this.state.address} numberoftxs={this.state.numberoftxs} blocknumber={this.state.current_block} />}
-          {!this.state.statsIsHidden && this.state.current_block > 0 && <History current_block={this.state.current_block}/>}
+          {!this.state.statsIsHidden && this.state.current_block > 0 && <History current_block={this.state.current_block} />}
         </div>
         {!this.state.menuIsHidden && <div className="buildInfo">
           Build: {process.env.REACT_APP_SHA}

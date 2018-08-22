@@ -35,6 +35,7 @@ const styles = theme => ({
     zIndex: 999999,
     position: 'absolute',
     display: 'flex',
+    height: "100%"
     
   },
 
