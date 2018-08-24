@@ -11,44 +11,31 @@ class History extends React.Component {
       loadingState: false
     };
 
-    console.log("Current Block");
-    console.log(this.props.current_block);
+    console.log("TX:");
+    console.log(this.props.data);
   }
 
   componentDidMount() {
-    this.loadMoreItems();
+   // this.loadMoreItems();
 
-    this.refs.iScroll.addEventListener("scroll", () => {
+    //this.refs.iScroll.addEventListener("scroll", () => {
      // if (this.refs.iScroll.scrollTop + this.refs.iScroll.clientHeight >=this.refs.iScroll.scrollHeight){
-        this.loadMoreItems();
+       // this.loadMoreItems();
      // }
-    });
+   // });
   }
 
-  loadMoreItems() {
-    this.setState({ loadingState: true });
-
-    const url = `${process.env.REACT_APP_API_SERVER}/api/inklin/history/${this.props.current_block}`
-    console.log(url);
-    fetch(url).then(res => res.json()).then(data => {
-          console.log(data);
-          this.setState({ items: data, loadingState: false });
-    });
-
-    // setTimeout(() => {
-    //   this.setState({ items: this.state.items + 10, loadingState: false });
-    // }, 3000);
-  }
+ 
 
   render() {
     return (
-      <div className="history" ref="iScroll" style={{ height: "200px", overflow: "auto" }}>
+      <div className="history" ref="iScroll" style={{ overflow: "auto", height: "200px" }}>
         <List>
-          {this.state.items.map(item => (
+          {this.props.data.map(item => (
               <ListItem key={`block-${item}`}>
-              <a href={"/" + item._id.block_number}>
-                <ListItemText primary={`Block ${item._id.block_number}`}  secondary={`${item.no} transactions`}/>
-                </a>
+              {/* <a href={"/" + item.id}> */}
+                <ListItemText primary={`${item.hash}`}  secondary={`${item.from} to ${item.to}`}/>
+                {/* </a> */}
           </ListItem>))}
         </List>
 

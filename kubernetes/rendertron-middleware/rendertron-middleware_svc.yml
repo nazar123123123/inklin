@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: rendertron-middleware
+spec:
+  selector:
+    app: rendertron-middleware
+  ports:
+  - name: rendertron-middleware
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  type: LoadBalancer

@@ -102,15 +102,25 @@ body {
 }
 
 
+
 .loading {
   margin: 20px;
 }
 
 .leftpanel {
   position: absolute;
-
+  bottom: 10px;
   left: 80px;
   width: 20%;
+  top: 0px;
+}
+
+
+.bottompanel {
+  position: absolute;
+  bottom: 10px;
+  left: 80px;
+  width: 95%;
 }
 
 .datepicker input{
@@ -130,13 +140,17 @@ body {
 .history {
   opacity: .6;
   margin-top: 10px;
-
+  height: 200px;
   /* Height of the footer */
   z-index: 9999;
   color: #40c4ff;
   background-color: black;
 }
 
+.history li p {
+  font-size: 5px;
+
+}
 /* .history a {
   text-decoration: none;
 } */

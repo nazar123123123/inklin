@@ -48,6 +48,7 @@ class Inklin extends React.Component {
       pagetitle: "Inklin Ethereum - ETH - Blockchain Visualisation",
       pagedescription: "Ethereum - ETH - Blockchain Visualisation and Analysis tool",
       network: {},
+      nodes: [],
       block_info: {},
       isLive: true,
       numberoftxs: 0,
@@ -96,7 +97,6 @@ class Inklin extends React.Component {
     if (searchTerm !== "") {
       const url = 'http://api.inkl.in/api/inklin/search/' + searchTerm
 
-      console.log(url);
 
       fetch(url).then(res => res.json()).then(data => {
         if (data.length === 1) {
@@ -402,16 +402,19 @@ class Inklin extends React.Component {
         this.setState({ shouldRedraw: false })
 
         console.log(`Got ${data.edges.length} results`);
+
         this.setState({ data: data })
-      } else {
-        console.log("Still Waiting");
-      }
 
       const zoomTimer = setInterval(() => {
         this.state.network.fit({ animation: true })
         clearInterval(this.state.zoomTimer)
       }, 2000);
+      
       this.setState({ zoomTimer: zoomTimer })
+
+      } else {
+        console.log("Still Waiting");
+      }
 
       const streamTimer = setInterval(() => {
         this.stream()
@@ -521,8 +524,12 @@ class Inklin extends React.Component {
 
         <div className="leftpanel">
           {!this.state.volumeIsHidden && <VolumeChart data={this.state.volume_data} options={this.state.volume_options} shouldRedraw={this.state.shouldRedraw} />}
-        </div>
 
+        </div>
+        <div className="bottompanel">
+
+          {this.state.data.edges.length > 0 && !this.state.statsIsHidden && <History data={this.state.data.edges} />}
+</div>
         {/* {!this.state.menuIsHidden && <MenuAppBar onLuis={this.handleLuis} onSpeak={this.handleSpeak} placeholder={this.state.placeholder} />} */}
         {!this.state.menuIsHidden && <MiniDrawer handleLive={this.handleLive} handleVolume={this.hideVolume} handleSearch={this.hideSearch} handleStats={this.hideStats} showVolume={!this.state.volumeIsHidden} showStats={!this.state.statsIsHidden} showSearch={!this.state.searchIsHidden} isLive={this.state.isLive} currentBlock={this.state.current_block} />}
 
@@ -534,8 +541,8 @@ class Inklin extends React.Component {
         <div className="rightpanel">
           {!this.state.searchIsHidden && <SearchField handleFocus={this.props.handleFocus} handleLuis={this.handleLuis} />}
           {!this.state.statsIsHidden && <Info block_time={this.state.block_time} block_info={this.state.block_info} address={this.state.address} numberoftxs={this.state.numberoftxs} blocknumber={this.state.current_block} />}
-          {!this.state.statsIsHidden && this.state.current_block > 0 && <History current_block={this.state.current_block} />}
-        </div>
+       </div>
+ 
         {!this.state.menuIsHidden && <div className="buildInfo">
           Build: {process.env.REACT_APP_SHA}
         </div>}

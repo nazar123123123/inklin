@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rendertron-middleware
+  labels:
+    app: rendertron-middleware
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rendertron-middleware
+  template:
+    metadata:
+      labels:
+        app: rendertron-middleware
+    spec:
+      containers:
+      - name: rendertron-middleware
+        image: inklin/rendertron-middleware:latest
+        ports: 
+        - containerPort: 80
+   
