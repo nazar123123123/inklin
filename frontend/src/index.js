@@ -20,8 +20,8 @@ import './index.css';
 ReactGA.initialize('UA-64729178-1');
 ReactGA.pageview(window.location.pathname + window.location.search);
 
-var ReactAI  = require('react-appinsights');
-ReactAI.init({instrumentationKey:'99956a9b-a5c8-41f0-a252-087872ffaf03'});
+var ReactAI = require('react-appinsights');
+ReactAI.init({ instrumentationKey: '99956a9b-a5c8-41f0-a252-087872ffaf03' });
 
 const theme = createMuiTheme({
   palette: {
@@ -47,6 +47,8 @@ class Inklin extends React.Component {
     this.state = {
       pagetitle: "Inklin Ethereum - ETH - Blockchain Visualisation",
       pagedescription: "Ethereum - ETH - Blockchain Visualisation and Analysis tool",
+      screenshot: "",
+      url: "",
       network: {},
       nodes: [],
       block_info: {},
@@ -290,12 +292,12 @@ class Inklin extends React.Component {
 
     console.log(data_url)
     fetch(data_url).then(res => res.json()).then(data => {
-      this.setState({ data: data.docs, displayProgress: false, numberoftxs: data.length, pagedescription: `Analysis of Ethereum address ${address} with ${data.length} transactions associated with it` })
+      this.setState({ data: data.docs, displayProgress: false, numberoftxs: data.length, url: `http://inkl.in/${this.state.current_block}`, screenshot: `http://img.inkl.in/api/shotter?block=${this.state.current_block}`, pagedescription: `Analysis of Ethereum address ${address} with ${data.length} transactions associated with it` })
       const zoomTimer = setInterval(() => {
         this.state.network.fit({ animation: true })
         clearInterval(this.state.zoomTimer)
       }, 2000);
-  
+
     });
 
     const histogram_url = `${process.env.REACT_APP_API_SERVER}/api/inklin/histogram/${address}`
@@ -345,7 +347,7 @@ class Inklin extends React.Component {
     const data_url = `${process.env.REACT_APP_API_SERVER}/api/inklin/transactions/${block}`
 
     fetch(data_url).then(res => res.json()).then(data => {
-      this.setState({ data: data, displayProgress: false, current_block: data.block_number, numberoftxs: data.edges.length, pagedescription: `Analysis of Ethereum Block ${block} containing ${data.edges.length} transactions` })
+      this.setState({ data: data, displayProgress: false, current_block: data.block_number, numberoftxs: data.edges.length, url: `http://inkl.in/${this.state.current_block}`, screenshot: `http://img.inkl.in/api/shotter?block=${this.state.current_block}`, pagedescription: `Analysis of Ethereum Block ${block} containing ${data.edges.length} transactions` })
     });
 
 
@@ -405,12 +407,12 @@ class Inklin extends React.Component {
 
         this.setState({ data: data })
 
-      const zoomTimer = setInterval(() => {
-        this.state.network.fit({ animation: true })
-        clearInterval(this.state.zoomTimer)
-      }, 2000);
-      
-      this.setState({ zoomTimer: zoomTimer })
+        const zoomTimer = setInterval(() => {
+          this.state.network.fit({ animation: true })
+          clearInterval(this.state.zoomTimer)
+        }, 2000);
+
+        this.setState({ zoomTimer: zoomTimer })
 
       } else {
         console.log("Still Waiting");
@@ -516,10 +518,34 @@ class Inklin extends React.Component {
 
 
       <MuiThemeProvider theme={theme}>
-        <Helmet>
+        <Helmet pagetitle={this.state.pagetitle}>
           <meta charSet="utf-8" />
           <title>{this.state.pagetitle}</title>
           <meta name="keywords" content="ethereum, explorer, eth, search, blockchain, crypto, currency, visualisation" />
+
+          <meta itemprop="name" content={this.state.pagetitle} />
+          <meta itemprop="description" content={this.state.pagetitle} />
+          <meta itemprop="image" content={this.state.screenshot} />
+
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:site" content="@justindavies" />
+          <meta name="twitter:title" content={this.state.pagetitle} />
+          <meta name="twitter:description" content={this.state.pagetitle}/>
+          <meta name="twitter:creator" content="@justindavies" />
+
+          <meta name="twitter:image:src" content={this.state.screenshot} />
+
+
+          <meta property="og:title" content={this.state.pagetitle} />
+          <meta property="og:type" content="article" />
+          <meta property="og:url" content={this.state.url} />
+          <meta property="og:image" content={this.state.screenshot} />
+          <meta property="og:description" content={this.state.pagedescription} />
+          <meta property="og:site_name" content="http://inkl.in" />
+          <meta property="article:published_time" content={this.state.block_time} />
+          <meta property="article:modified_time" content={this.state.block_time} />
+          <meta property="article:section" content="Ethereum Blocks" />
+          <meta property="article:tag" content="Article Tag" />
         </Helmet>
 
         <div className="leftpanel">
@@ -541,8 +567,8 @@ class Inklin extends React.Component {
         <div className="rightpanel">
           {!this.state.searchIsHidden && <SearchField handleFocus={this.props.handleFocus} handleLuis={this.handleLuis} />}
           {!this.state.statsIsHidden && <Info block_time={this.state.block_time} block_info={this.state.block_info} address={this.state.address} numberoftxs={this.state.numberoftxs} blocknumber={this.state.current_block} />}
-       </div>
- 
+        </div>
+
         {!this.state.menuIsHidden && <div className="buildInfo">
           Build: {process.env.REACT_APP_SHA}
         </div>}
