@@ -526,10 +526,10 @@ class Inklin extends React.Component {
           {!this.state.volumeIsHidden && <VolumeChart data={this.state.volume_data} options={this.state.volume_options} shouldRedraw={this.state.shouldRedraw} />}
 
         </div>
-        <div className="bottompanel">
+        {/* <div className="bottompanel">
 
           {this.state.data.edges.length > 0 && !this.state.statsIsHidden && <History data={this.state.data.edges} />}
-</div>
+        </div> */}
         {/* {!this.state.menuIsHidden && <MenuAppBar onLuis={this.handleLuis} onSpeak={this.handleSpeak} placeholder={this.state.placeholder} />} */}
         {!this.state.menuIsHidden && <MiniDrawer handleLive={this.handleLive} handleVolume={this.hideVolume} handleSearch={this.hideSearch} handleStats={this.hideStats} showVolume={!this.state.volumeIsHidden} showStats={!this.state.statsIsHidden} showSearch={!this.state.searchIsHidden} isLive={this.state.isLive} currentBlock={this.state.current_block} />}
 
