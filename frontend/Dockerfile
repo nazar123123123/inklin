@@ -18,6 +18,6 @@ COPY --from=builder /usr/src/app/build /usr/share/nginx/html
 
 # Fix NGINX config for React
 #RUN sed -ie 's/index  index.html index.htm;/try_files $uri $uri\/ \/index.html;/g' /etc/nginx/conf.d/default.conf
-COPY nginx.conf /etc/nginx
+COPY nginx.conf /etc/nginx/
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
