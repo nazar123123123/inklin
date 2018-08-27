@@ -360,7 +360,7 @@ app.get('/api/inklin/txaddress/:address', function (req, res) {
 
 	console.log(`Requesting ${req.params.lastblock}`);
 
-	Transaction.paginate({ "$or": [{ "from": req.params.address.toLowerCase() }, { "to": req.params.address.toLowerCase() }] }, { from: 1, to: 1, block_time: 1, data: 1, limit: 5000 }, function (err, results) {
+	Transaction.paginate({ "$or": [{ "from": req.params.address.toLowerCase() }, { "to": req.params.address.toLowerCase() }] }, { from: 1, to: 1, block_time: 1, data: 1, limit: 2000 }, function (err, results) {
 		console.log(results);
 		if (err)
 			console.log(err)

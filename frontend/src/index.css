@@ -180,6 +180,7 @@ text-decoration: none;
   z-index: 9999;
   color: #40c4ff;
   background-color: black;
+  margin-top:10px;
 }
 
 
@@ -195,18 +196,20 @@ text-decoration: none;
 }
 
 .sharing {
-  position: absolute;
-  top: 20%;
-  left: 70px;
-  opacity: .6;
+  margin-top:10px;
 
   /* Height of the footer */
   z-index: 9999;
   color: #40c4ff;
   background-color: black;
+  background-color: rgba(0,0,0,0.5);
+  display: grid;
 }
 
-
+.shareitem {
+  padding: 10px;
+  width: 64px;
+}
 
 .leftmenu {
   position: absolute;

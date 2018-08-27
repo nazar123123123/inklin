@@ -27,7 +27,7 @@ import Github from 'mdi-material-ui/GithubCircle'
 import EthereumIcon from 'mdi-material-ui/Ethereum'
 import HeartIcon from 'mdi-material-ui/Heart'
 import ShareIcon from 'mdi-material-ui/ShareVariant'
-import SharingModal from './SharingModal'
+import SharingModal from './Sharing'
 
 const styles = theme => ({
   root: {

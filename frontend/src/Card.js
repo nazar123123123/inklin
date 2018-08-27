@@ -80,11 +80,11 @@ class RecipeReviewCard extends React.Component {
                     </Typography>
                 </CardContent>
                 <CardActions className={classes.actions} disableActionSpacing>
-                    <IconButton aria-label="Add to favorites">
+                    {/* <IconButton aria-label="Add to favorites">
                         <FavoriteIcon />
-                    </IconButton>
+                    </IconButton> */}
                     <IconButton aria-label="Share">
-                        <ShareIcon />
+                        <ShareIcon onClick={this.props.handleSharing}/>
                     </IconButton>
                     <IconButton
                         className={classnames(classes.expand, {

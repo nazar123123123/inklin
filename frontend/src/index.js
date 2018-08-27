@@ -13,7 +13,7 @@ import ReactGA from 'react-ga';
 import History from './History'
 import Card from './Card'
 import { Helmet } from "react-helmet";
-
+import Sharing from './Sharing'
 import './index.css';
 
 
@@ -41,6 +41,7 @@ class Inklin extends React.Component {
     this.handleSpeak = this.handleSpeak.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.handleCloseSearch = this.handleCloseSearch.bind(this);
+    this.handleSharing = this.handleSharing.bind(this);
 
     this.addData = this.addData.bind(this);
     this.handleContractChooserClose = this.handleContractChooserClose.bind(this);
@@ -61,6 +62,7 @@ class Inklin extends React.Component {
       address: "0x274F3c32C90517975e29Dfc209a23f315c1e5Fc7",
       previousaddress: "0x274F3c32C90517975e29Dfc209a23f315c1e5Fc7",
       volumeIsHidden: false,
+      sharingIsHidden: true,
       searchIsHidden: false,
       statsIsHidden: false,
       showSearch: false,
@@ -141,6 +143,12 @@ class Inklin extends React.Component {
   handleSpeak() {
     console.log("Speak")
     this.setState({ placeholder: "Start Speaking..." })
+  }
+
+
+  handleSharing() {
+    console.log("Sharing")
+    this.setState({ sharingIsHidden: !this.state.sharingIsHidden })
   }
 
   handleCloseSearch() {
@@ -293,12 +301,14 @@ class Inklin extends React.Component {
 
     console.log(data_url)
     fetch(data_url).then(res => res.json()).then(data => {
-      this.setState({ data: data.docs, displayProgress: false, numberoftxs: data.length, url: `http://inkl.in/${this.state.current_block}`, screenshot: `http://img.inkl.in/api/shotter?block=${this.state.current_block}`, pagedescription: `Analysis of Ethereum address ${address} with ${data.length} transactions associated with it` })
+      this.setState({statsIsHidden: true,  data: data.docs, displayProgress: false, numberoftxs: data.length, url: `http://inkl.in/${this.state.current_block}`, screenshot: `http://img.inkl.in/api/shotter?block=${this.state.current_block}`, pagedescription: `Analysis of Ethereum address ${address} with ${data.length} transactions associated with it` })
+
       const zoomTimer = setInterval(() => {
         this.state.network.fit({ animation: true })
         clearInterval(this.state.zoomTimer)
       }, 2000);
 
+      this.setState({zoomTimer: zoomTimer})
     });
 
     const histogram_url = `${process.env.REACT_APP_API_SERVER}/api/inklin/histogram/${address}`
@@ -565,7 +575,8 @@ class Inklin extends React.Component {
 
         <SearchDialog open={this.state.showSearch} closeDrawer={this.handleCloseSearch} />
         <div className="rightpanel">
-          {this.state.data.edges.length > 0 && <Card data={this.state.data.edges} title={`Looking at block ${this.state.current_block}`} block_info={this.state.block_info}  block_time={this.state.block_time.toString()} numberoftxs={this.state.numberoftxs} />}
+          {this.state.data.edges.length > 0 && !this.state.statsIsHidden && <Card data={this.state.data.edges} title={`Looking at block ${this.state.current_block}`} block_info={this.state.block_info}  block_time={this.state.block_time.toString()} numberoftxs={this.state.numberoftxs} handleSharing={this.handleSharing} />}
+          {!this.state.sharingIsHidden  && <Sharing block_number={this.state.current_block}  />}
         </div>
 
         {!this.state.menuIsHidden && <div className="buildInfo">
