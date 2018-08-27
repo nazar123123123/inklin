@@ -11,6 +11,7 @@ import MiniDrawer from './MiniDrawer'
 import ProgressIndicator from './ProgressIndicator'
 import ReactGA from 'react-ga';
 import History from './History'
+import Card from './Card'
 import { Helmet } from "react-helmet";
 
 import './index.css';
@@ -398,7 +399,7 @@ class Inklin extends React.Component {
       if (parseInt(data.block_number) !== parseInt(this.state.current_block)) {
 
         this.setState({ shouldRedraw: true })
-        this.setState({ block_info: data.stats, viewedID: data.block_number, block_time: data.block_time, current_block: data.block_number, numberoftxs: `${data.edges.length}/block` })
+        this.setState({ block_info: data.stats, viewedID: data.block_number, block_time: data.block_time, current_block: data.block_number, numberoftxs: `${data.edges.length}` })
         this.addData(data.edges.length)
 
         this.setState({ shouldRedraw: false })
@@ -549,11 +550,10 @@ class Inklin extends React.Component {
         </Helmet>
 
         <div className="leftpanel">
-          {!this.state.volumeIsHidden && <VolumeChart data={this.state.volume_data} options={this.state.volume_options} shouldRedraw={this.state.shouldRedraw} />}
-
+        {!this.state.searchIsHidden && <SearchField handleFocus={this.props.handleFocus} handleLuis={this.handleLuis} />}
+        {!this.state.volumeIsHidden && <VolumeChart data={this.state.volume_data} options={this.state.volume_options} shouldRedraw={this.state.shouldRedraw} />}
         </div>
         {/* <div className="bottompanel">
-
           {this.state.data.edges.length > 0 && !this.state.statsIsHidden && <History data={this.state.data.edges} />}
         </div> */}
         {/* {!this.state.menuIsHidden && <MenuAppBar onLuis={this.handleLuis} onSpeak={this.handleSpeak} placeholder={this.state.placeholder} />} */}
@@ -565,8 +565,7 @@ class Inklin extends React.Component {
 
         <SearchDialog open={this.state.showSearch} closeDrawer={this.handleCloseSearch} />
         <div className="rightpanel">
-          {!this.state.searchIsHidden && <SearchField handleFocus={this.props.handleFocus} handleLuis={this.handleLuis} />}
-          {!this.state.statsIsHidden && <Info block_time={this.state.block_time} block_info={this.state.block_info} address={this.state.address} numberoftxs={this.state.numberoftxs} blocknumber={this.state.current_block} />}
+          {this.state.data.edges.length > 0 && <Card data={this.state.data.edges} title={`Looking at block ${this.state.current_block}`} block_info={this.state.block_info}  block_time={this.state.block_time.toString()} numberoftxs={this.state.numberoftxs} />}
         </div>
 
         {!this.state.menuIsHidden && <div className="buildInfo">
