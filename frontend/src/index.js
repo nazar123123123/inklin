@@ -356,9 +356,9 @@ class Inklin extends React.Component {
     })
 
     const data_url = `${process.env.REACT_APP_API_SERVER}/api/inklin/transactions/${block}`
-
+    console.log(data_url);
     fetch(data_url).then(res => res.json()).then(data => {
-      this.setState({ data: data, displayProgress: false, current_block: data.block_number, numberoftxs: data.edges.length, url: `http://inkl.in/${this.state.current_block}`, screenshot: `http://img.inkl.in/api/shotter?block=${this.state.current_block}`, pagedescription: `Analysis of Ethereum Block ${block} containing ${data.edges.length} transactions` })
+      this.setState({ volumeIsHidden:true, block_info: data.stats, data: data, displayProgress: false, current_block: data.block_number, numberoftxs: data.edges.length, url: `http://inkl.in/${this.state.current_block}`, screenshot: `http://img.inkl.in/api/shotter?block=${this.state.current_block}`, pagedescription: `Analysis of Ethereum Block ${block} containing ${data.edges.length} transactions` })
     });
 
 
