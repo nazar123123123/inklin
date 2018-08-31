@@ -12,6 +12,7 @@ import ProgressIndicator from './ProgressIndicator'
 import ReactGA from 'react-ga';
 import History from './History'
 import Card from './Card'
+import AddressCard from './AddressCard'
 import { Helmet } from "react-helmet";
 import Sharing from './Sharing'
 import './index.css';
@@ -63,6 +64,8 @@ class Inklin extends React.Component {
       previousaddress: "0x274F3c32C90517975e29Dfc209a23f315c1e5Fc7",
       volumeIsHidden: false,
       sharingIsHidden: true,
+      addressCardIsHidden: true,
+      clicked_address: "",
       searchIsHidden: false,
       statsIsHidden: false,
       showSearch: false,
@@ -92,7 +95,12 @@ class Inklin extends React.Component {
       data: {
         nodes: [],
         edges: []
+      },
+      clicked: {
+        nodes: [],
+        edges: []
       }
+
     };
 
   }
@@ -462,8 +470,6 @@ class Inklin extends React.Component {
 
   componentDidMount() {
 
-
-
     const myURL = new URL(window.location.href);
     console.log(myURL);
 
@@ -492,18 +498,31 @@ class Inklin extends React.Component {
     this.setState({ showSnackbar: false })
   }
 
+  handleClick = event => {
+    var { nodes, edges } = event;
+    console.log(nodes);
+    console.log(edges);
+
+    const data_url = `${process.env.REACT_APP_API_SERVER}/api/inklin/txaddress/${nodes[0]}`
+
+
+    console.log(data_url)
+    fetch(data_url).then(res => res.json()).then(data => {
+      console.log(data.docs.stats);
+      this.setState({addressCardIsHidden: false, clicked_address: nodes[0], clicked: data.docs})
+    });
+
+
+  }
   render() {
     //    const { data } = this.state;
     const { data, highlightLink } = this.state;
 
 
     var events = {
-      select: function (event) {
-        var { nodes, edges } = event;
-        console.log(nodes);
-        console.log(edges);
-      }
+      select: this.handleClick
     }
+    
 
     const options = {
       nodes: {
@@ -562,10 +581,12 @@ class Inklin extends React.Component {
         <div className="leftpanel">
         {!this.state.searchIsHidden && <SearchField handleFocus={this.props.handleFocus} handleLuis={this.handleLuis} />}
         {!this.state.volumeIsHidden && <VolumeChart data={this.state.volume_data} options={this.state.volume_options} shouldRedraw={this.state.shouldRedraw} />}
+        {!this.state.addressCardIsHidden && <AddressCard data={this.state.clicked.edges} title={`Address ${this.state.clicked_address}`} block_info={this.state.block_info}  block_time={this.state.block_time.toString()} numberoftxs={this.state.numberoftxs} />}
+
         </div>
-        {/* <div className="bottompanel">
-          {this.state.data.edges.length > 0 && !this.state.statsIsHidden && <History data={this.state.data.edges} />}
-        </div> */}
+        {/*<div className="bottompanel">
+          {this.state.data.edges.length > 0 && <History data={this.state.data.edges} />}
+         </div> */}
         {/* {!this.state.menuIsHidden && <MenuAppBar onLuis={this.handleLuis} onSpeak={this.handleSpeak} placeholder={this.state.placeholder} />} */}
         {!this.state.menuIsHidden && <MiniDrawer handleLive={this.handleLive} handleVolume={this.hideVolume} handleSearch={this.hideSearch} handleStats={this.hideStats} showVolume={!this.state.volumeIsHidden} showStats={!this.state.statsIsHidden} showSearch={!this.state.searchIsHidden} isLive={this.state.isLive} currentBlock={this.state.current_block} />}
 

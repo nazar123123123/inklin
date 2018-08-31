@@ -98,7 +98,7 @@ body {
 
   top: 10px; 
   right: 10px;
-  width: auto;
+  width: "30%";
 }
 
 
@@ -183,8 +183,12 @@ text-decoration: none;
   margin-top:10px;
 }
 
+.address {
+  margin-top: 10px;
+  background-color: black;
 
-.infoPane {
+}
+.infoPane,  {
   margin-top: 10px;
   opacity: .6;
   padding-right: 10px;

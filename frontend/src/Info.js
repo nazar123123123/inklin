@@ -15,8 +15,6 @@ const styles = theme => ({
   },
 });
 
-const style = {backgroundColor: "black", color: "white"};
-
 
 class Info extends React.Component {
 
