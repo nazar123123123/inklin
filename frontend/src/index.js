@@ -313,7 +313,7 @@ class Inklin extends React.Component {
 
       const zoomTimer = setInterval(() => {
         this.state.network.fit({ animation: true })
-        this.state.network.setOptions( { physics: false } );
+        // this.state.network.setOptions( { physics: false } );
 
         clearInterval(this.state.zoomTimer)
       }, 2000);
@@ -431,7 +431,7 @@ class Inklin extends React.Component {
         const zoomTimer = setInterval(() => {
           this.state.network.fit({ animation: true })
           clearInterval(this.state.zoomTimer)
-          this.state.network.setOptions( { physics: false } );
+          // this.state.network.setOptions( { physics: false } );
 
         }, 2000);
 
