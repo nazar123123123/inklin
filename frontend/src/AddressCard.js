@@ -56,14 +56,6 @@ class AddressCard extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const ua = navigator.userAgent;
-
-        console.log(ua);
-
-        // if (!ua.includes("HeadlessChrome")) {
-        //     console.log("Not Headless")
-        //     this.setState(state => ({ expanded: false }));
-        // }
 
         const stats = `${this.props.numberoftxs} transactions (${this.props.block_info.tokens} ERC20), ${this.props.block_info.contracts} contracts created, Ξ${parseInt(this.props.block_info.ethvalue)} transferred`
         return (

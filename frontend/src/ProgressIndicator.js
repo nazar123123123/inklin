@@ -12,7 +12,7 @@ class ProgressIndicator extends React.Component {
   render() {
     return (
     <div className="progressIndicator">
-        <LinearProgress color="secondary"/>
+        <LinearProgress color="secondary" />
     </div>
     )
   };

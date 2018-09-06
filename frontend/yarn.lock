@@ -6175,6 +6175,13 @@ react-side-effect@^1.1.0:
     exenv "^1.2.1"
     shallowequal "^1.0.1"
 
+react-structured-data@^0.0.9:
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/react-structured-data/-/react-structured-data-0.0.9.tgz#7a959cc2c8b652fc39da956b1e4ad15a9d0ba8e4"
+  dependencies:
+    prop-types "^15.6.0"
+    react "^16.2.0"
+
 react-test-renderer@^16.0.0-0:
   version "16.4.1"
   resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.4.1.tgz#f2fb30c2c7b517db6e5b10ed20bb6b0a7ccd8d70"
@@ -6209,6 +6216,15 @@ react-transition-group@^2.2.1:
 "react@^15.6.2 || ^16.0", react@^16.4.1:
   version "16.4.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.4.1.tgz#de51ba5764b5dbcd1f9079037b862bd26b82fe32"
+  dependencies:
+    fbjs "^0.8.16"
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.0"
+
+react@^16.2.0:
+  version "16.4.2"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.4.2.tgz#2cd90154e3a9d9dd8da2991149fdca3c260e129f"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"

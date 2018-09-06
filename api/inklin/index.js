@@ -243,7 +243,6 @@ function getForceGraph(results) {
 				stats.tokens++
 				if (!tokens.includes(to) && !tmp_nodes.includes(to)) {
 					tokens.push(to)
-					getToken(to)
 				}
 
 				if (!tmp_nodes.includes(from) && !tokens.includes(from)) {
@@ -422,22 +421,7 @@ app.get('/api/inklin/address_stats/:address', function (req, res) {
 
 	client.trackNodeHttpRequest({ request: req, response: res });
 
-	if ("MONGODB" in process.env) {
-		mongoose.connect(process.env["MONGODB"]);
-	} else {
-		mongoose.connect('mongodb://localhost:27017/visualise_ethereum');
-	}
-
-	// Handle the connection event
-	var db = mongoose.connection;
-	db.on('error', console.error.bind(console, 'connection error:'));
-
-	db.once('open', function () {
-		console.log("DB connection alive");
-	});
-
-	console.log(`Requesting ${req.params.lastblock}`);
-
+	Transaction.count({})
 	Transaction.paginate({ "$or": [{ "from": req.params.address.toLowerCase() }, { "to": req.params.address.toLowerCase() }] }, { from: 1, to: 1, block_time: 1, data: 1, limit: 2000 }, function (err, results) {
 		console.log(results);
 		if (err)

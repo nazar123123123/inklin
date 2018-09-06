@@ -6,7 +6,6 @@ import SearchField from './SearchField'
 import VolumeChart from './VolumeChart';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import SearchDialog from './SearchDialog';
-import Info from './Info'
 import MiniDrawer from './MiniDrawer'
 import ProgressIndicator from './ProgressIndicator'
 import ReactGA from 'react-ga';
@@ -61,14 +60,14 @@ class Inklin extends React.Component {
       zoomTimer: 0,
       streamTimer: 0,
       displayProgress: false,
-      address: "0x274F3c32C90517975e29Dfc209a23f315c1e5Fc7",
-      previousaddress: "0x274F3c32C90517975e29Dfc209a23f315c1e5Fc7",
+      address: false,
       volumeIsHidden: false,
       sharingIsHidden: true,
       addressCardIsHidden: true,
       clicked_address: "",
       searchIsHidden: false,
       statsIsHidden: false,
+      addressStatsIsHidden: true,
       showSearch: false,
       placeholder: 'Search...',
       searchResults: [{ name: "One" }, { name: "two" }, { name: "three" }],
@@ -310,10 +309,12 @@ class Inklin extends React.Component {
 
     console.log(data_url)
     fetch(data_url).then(res => res.json()).then(data => {
-      this.setState({statsIsHidden: true,  data: data.docs, displayProgress: false, numberoftxs: data.length, url: `http://inkl.in/${this.state.current_block}`, screenshot: `http://img.inkl.in/api/shotter?block=${this.state.current_block}`, pagedescription: `Analysis of Ethereum address ${address} with ${data.length} transactions associated with it` })
+      this.setState({addressStatsIsHidden: false, statsIsHidden: true,  data: data.docs, displayProgress: false, numberoftxs: data.length, url: `http://inkl.in/${this.state.current_block}`, screenshot: `http://img.inkl.in/api/shotter?block=${this.state.current_block}`, pagedescription: `Analysis of Ethereum address ${address} with ${data.length} transactions associated with it` })
 
       const zoomTimer = setInterval(() => {
         this.state.network.fit({ animation: true })
+        this.state.network.setOptions( { physics: false } );
+
         clearInterval(this.state.zoomTimer)
       }, 2000);
 
@@ -416,7 +417,7 @@ class Inklin extends React.Component {
 
     fetch(url).then(res => res.json()).then(data => {
       if (parseInt(data.block_number) !== parseInt(this.state.current_block)) {
-
+        console.log(data);
         this.setState({ shouldRedraw: true })
         this.setState({ block_info: data.stats, viewedID: data.block_number, block_time: data.block_time, current_block: data.block_number, numberoftxs: `${data.edges.length}` })
         this.addData(data.edges.length)
@@ -430,6 +431,8 @@ class Inklin extends React.Component {
         const zoomTimer = setInterval(() => {
           this.state.network.fit({ animation: true })
           clearInterval(this.state.zoomTimer)
+          this.state.network.setOptions( { physics: false } );
+
         }, 2000);
 
         this.setState({ zoomTimer: zoomTimer })
@@ -486,7 +489,9 @@ class Inklin extends React.Component {
       this.setState({ current_block: searchTerm })
       this.getBlock(searchTerm)
     } else {
+      
       this.stream()
+
     }
 
   }
@@ -501,8 +506,6 @@ class Inklin extends React.Component {
 
   handleClick = event => {
     var { nodes, edges } = event;
-    console.log(nodes);
-    console.log(edges);
 
     const data_url = `${process.env.REACT_APP_API_SERVER}/api/inklin/txaddress/${nodes[0]}`
 
@@ -512,16 +515,26 @@ class Inklin extends React.Component {
       console.log(data.docs.stats);
       this.setState({addressCardIsHidden: false, clicked_address: nodes[0], clicked: data.docs})
     });
+  }
 
+  handleDrillDown = event => {
+    var { nodes, edges } = event;
+    
+    console.log(`DC on ${nodes[0]}`)
+    this.getAll(nodes[0])
 
   }
+
+
   render() {
     //    const { data } = this.state;
     const { data, highlightLink } = this.state;
 
 
     var events = {
-      select: this.handleClick
+    //  select: this.handleClick,
+      doubleClick: this.handleDrillDown,
+      
     }
     
 
@@ -588,7 +601,7 @@ class Inklin extends React.Component {
         <div className="bottompanel">
           {this.state.data.edges.length > 0 && <History data={this.state.data.edges} />}
          </div> 
-        {/* {!this.state.menuIsHidden && <MenuAppBar onLuis={this.handleLuis} onSpeak={this.handleSpeak} placeholder={this.state.placeholder} />} */}
+
         {!this.state.menuIsHidden && <MiniDrawer handleLive={this.handleLive} handleVolume={this.hideVolume} handleSearch={this.hideSearch} handleStats={this.hideStats} showVolume={!this.state.volumeIsHidden} showStats={!this.state.statsIsHidden} showSearch={!this.state.searchIsHidden} isLive={this.state.isLive} currentBlock={this.state.current_block} />}
 
         {this.state.data.edges.length > 0 && <Graph getNetwork={network => this.setState({ network })} graph={this.state.data} events={events} options={options} />}
@@ -597,8 +610,9 @@ class Inklin extends React.Component {
 
         <SearchDialog open={this.state.showSearch} closeDrawer={this.handleCloseSearch} />
         <div className="rightpanel">
-          {this.state.data.edges.length > 0 && !this.state.statsIsHidden && <Card data={this.state.data.edges} title={`Looking at block ${this.state.current_block}`} block_info={this.state.block_info}  block_time={this.state.block_time.toString()} numberoftxs={this.state.numberoftxs} handleSharing={this.handleSharing} />}
-          {!this.state.sharingIsHidden  && <Sharing block_number={this.state.current_block}  />}
+        {this.state.data.edges.length > 0 && !this.state.statsIsHidden && <Card data={this.state.data.edges} title={`Block ${this.state.current_block}`} info={this.state.data.stats}  subtitle={this.state.block_time.toString()} handleSharing={this.handleSharing} />}
+        {this.state.data.edges.length > 0 && !this.state.addressStatsIsHidden && <Card data={this.state.data.edges} title={`Address`} info={this.state.data.stats}  subtitle={this.state.address}  handleSharing={this.handleSharing} />}
+        {!this.state.sharingIsHidden  && <Sharing block_number={this.state.current_block}  />}
         </div>
 
         {!this.state.menuIsHidden && <div className="buildInfo">

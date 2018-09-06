@@ -60,27 +60,15 @@ class RecipeReviewCard extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const ua = navigator.userAgent;
 
-        console.log(ua);
 
-        // if (!ua.includes("HeadlessChrome")) {
-        //     console.log("Not Headless")
-        //     this.setState(state => ({ expanded: false }));
-        // }
-
-        const stats = `${this.props.numberoftxs} transactions (${this.props.block_info.tokens} ERC20), ${this.props.block_info.contracts} contracts created, Ξ${parseInt(this.props.block_info.ethvalue)} transferred`
+        const stats = `${this.props.data.length} transactions (${this.props.info.tokens} ERC20), Ξ${parseInt(this.props.info.ethvalue)} transferred`
         return (
             <Card className={classes.card}>
                 <CardHeader
-                    avatar={
-                        <Avatar aria-label="Recipe" className={classes.avatar}>
-                            B
-                        </Avatar>
-                    }
 
                     title={this.props.title}
-                    subheader={this.props.block_time}
+                    subheader={this.props.subtitle}
                 />
 
                 <CardContent>
