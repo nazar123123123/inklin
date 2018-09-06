@@ -10,6 +10,7 @@ import Info from './Info'
 import MiniDrawer from './MiniDrawer'
 import ProgressIndicator from './ProgressIndicator'
 import ReactGA from 'react-ga';
+import Lovely from './Lovely'
 import History from './History'
 import Card from './Card'
 import AddressCard from './AddressCard'
@@ -584,9 +585,9 @@ class Inklin extends React.Component {
         {!this.state.addressCardIsHidden && <AddressCard data={this.state.clicked.edges} title={`Address ${this.state.clicked_address}`} block_info={this.state.block_info}  block_time={this.state.block_time.toString()} numberoftxs={this.state.numberoftxs} />}
 
         </div>
-        {/*<div className="bottompanel">
+        <div className="bottompanel">
           {this.state.data.edges.length > 0 && <History data={this.state.data.edges} />}
-         </div> */}
+         </div> 
         {/* {!this.state.menuIsHidden && <MenuAppBar onLuis={this.handleLuis} onSpeak={this.handleSpeak} placeholder={this.state.placeholder} />} */}
         {!this.state.menuIsHidden && <MiniDrawer handleLive={this.handleLive} handleVolume={this.hideVolume} handleSearch={this.hideSearch} handleStats={this.hideStats} showVolume={!this.state.volumeIsHidden} showStats={!this.state.statsIsHidden} showSearch={!this.state.searchIsHidden} isLive={this.state.isLive} currentBlock={this.state.current_block} />}
 

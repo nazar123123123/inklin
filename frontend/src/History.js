@@ -18,75 +18,44 @@ const styles = theme => ({
   },
   table: {
     minWidth: 700,
-  },
+  } 
+
 });
 
 class History extends React.Component {
   constructor(props) {
    super(props);
-   this.state = {
-      items: [],
-      loadingState: false
-    };
-    const { classes } = props;
-
-    console.log("TX:");
-    console.log(this.props.data);
-  }
-
-  componentDidMount() {
-   // this.loadMoreItems();
-
-    //this.refs.iScroll.addEventListener("scroll", () => {
-     // if (this.refs.iScroll.scrollTop + this.refs.iScroll.clientHeight >=this.refs.iScroll.scrollHeight){
-       // this.loadMoreItems();
-     // }
-   // });
   }
 
  
 
   render() {
-    // return (
-    //   <div className="history" ref="iScroll" style={{ overflow: "auto", height: "200px" }}>
-    //     <List>
-    //       {this.props.data.map(item => (
-    //           <ListItem key={`block-${item}`}>
-    //           {/* <a href={"/" + item.id}> */}
-    //             <ListItemText primary={`${item.hash}`}  secondary={`${item.from} to ${item.to}`}/>
-    //             {/* </a> */}
-    //       </ListItem>))}
-    //     </List>
 
-    //   </div>
-    // );
     return (
-      <div className="history">
-      <Paper >
-        <Table style={{ overflow: "auto", height: "200px" }}>
+      <Paper className="transactions">
+        <Table >
           <TableHead>
             <TableRow>
               <TableCell>TxHash</TableCell>
-              <TableCell numeric>From</TableCell>
-              <TableCell numeric>To</TableCell>
-              <TableCell numeric>Value</TableCell>
+              <TableCell>From</TableCell>
+              <TableCell>To</TableCell>
+              <TableCell>Value</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {this.props.data.map(row => {
               return (
                 <TableRow>
-                  <TableCell numeric>{row.hash}</TableCell>
-                  <TableCell numeric>{row.from}</TableCell>
-                  <TableCell numeric>{row.to}</TableCell>
-                  <TableCell numeric>{row.value}</TableCell>
+                  <TableCell>{row.hash}</TableCell>
+                  <TableCell><a href={row.from}>{row.from}</a></TableCell>
+                  <TableCell><a href={row.to}>{row.to}</a></TableCell>
+                  <TableCell>{row.value}</TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
       </Paper>
-      </div>
     );
   
   }

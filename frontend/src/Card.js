@@ -103,24 +103,9 @@ class RecipeReviewCard extends React.Component {
                         aria-expanded={this.state.expanded}
                         aria-label="Show more"
                     >
-                        <ExpandMoreIcon />
                     </IconButton>
                 </CardActions>
-                <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-                    <CardContent className="transactions">
-                        <List dense={true}>
-                            {this.props.data.map(row => {
-                                return (
-
-                                    <ListItem>
-                                        <ListItemText primary={`TxHash: ${row.hash}`} secondary={`From: ${row.from}\nTo: ${row.to}`} />
-                                    </ListItem>
-
-                                )
-                            })}
-                        </List>
-                    </CardContent>
-                </Collapse>
+              
             </Card>
         );
     }

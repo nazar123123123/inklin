@@ -15,35 +15,37 @@ var mongoosePaginate = require('mongoose-paginate');
 var Transaction = require('./app/models/Transaction');
 var Contract = require('./app/models/Contract');
 var Favourite = require('./app/models/Favourite');
+var Token = require('./app/models/Token');
 
+// Lookup for tokens
+var tokens
+
+if ("MONGODB" in process.env) {
+	mongoose.connect(process.env["MONGODB"]);
+} else {
+	mongoose.connect('mongodb://localhost:27017/visualise_ethereum');
+}
+
+// Handle the connection event
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+
+db.once('open', function () {
+	console.log("DB connection alive");
+});
+
+
+
+Token.find({}, function (err, t) {
+	if (err)
+		console.log(err)
+	else
+		exposeTokens(t)
+});
 
 
 // Create express app as usual
 const app = express();
-
-function getColor(maxval, minval, val, moreisgood) {
-	var intnsty = (val - minval) / (maxval - minval);
-	var r, g;
-	if (moreisgood) {
-		if (intnsty > 0.5) {
-			g = 255;
-			r = Math.round(2 * (1 - intnsty) * 255);
-		} else {
-			r = 255;
-			g = Math.round(2 * intnsty * 255);
-		}
-
-	} else { //lessisgood
-		if (intnsty > 0.5) {
-			r = 255;
-			g = Math.round(2 * (1 - intnsty) * 255);
-		} else {
-			g = 255;
-			r = Math.round(2 * intnsty * 255);
-		}
-	}
-	return "rgb(" + r.toString() + ", " + g.toString() + ", 0)";
-}
 
 
 // CORS
@@ -183,6 +185,19 @@ app.get('/api/inklin/transactions/:from/:to', function (req, res) {
 	});
 });
 
+function exposeTokens(t) {
+  	tokens = t
+}
+
+function getToken(address) {
+	const token = tokens.find(x => x.address === address)
+
+	return (token ? token["name"] : "")
+	// if (token) {
+	// 	return token["name"]
+	// }
+}
+
 function getForceGraph(results) {
 	const tmp_nodes = []
 	const tokens = []
@@ -228,6 +243,7 @@ function getForceGraph(results) {
 				stats.tokens++
 				if (!tokens.includes(to) && !tmp_nodes.includes(to)) {
 					tokens.push(to)
+					getToken(to)
 				}
 
 				if (!tmp_nodes.includes(from) && !tokens.includes(from)) {
@@ -268,7 +284,7 @@ function getForceGraph(results) {
 	}
 
 	for (i in tokens) {
-		nodes.push({ id: tokens[i], color: "#2aaee2", title: tokens[i] })
+		nodes.push({ id: tokens[i], color: "#2aaee2", label: getToken(tokens[i]), font: '40px arial white' })
 	}
 
 	const edges = links
@@ -340,6 +356,35 @@ function getForceGraphLive(results) {
 	return { results: res }
 }
 
+app.get('/api/inklin/token/:address', function (req, res) {
+
+	if ("MONGODB" in process.env) {
+		mongoose.connect(process.env["MONGODB"]);
+	} else {
+		mongoose.connect('mongodb://localhost:27017/visualise_ethereum');
+	}
+
+	// Handle the connection event
+	var db = mongoose.connection;
+	db.on('error', console.error.bind(console, 'connection error:'));
+
+	db.once('open', function () {
+		console.log("DB connection alive");
+	});
+
+
+
+	Token.find({"address": req.params.address }, function (err, t) {
+		if (err)
+			console.log(err)
+		else
+			console.log(t)
+			res.json(t);
+
+	});
+
+});
+
 app.get('/api/inklin/txaddress/:address', function (req, res) {
 
 	client.trackNodeHttpRequest({ request: req, response: res });
@@ -371,7 +416,6 @@ app.get('/api/inklin/txaddress/:address', function (req, res) {
 
 	});
 });
-
 
 
 app.get('/api/inklin/address_stats/:address', function (req, res) {
@@ -461,9 +505,6 @@ app.get('/api/inklin/tokens/:block', function (req, res) {
 
 
 
-
-
-
 app.get('/api/inklin/histogram/:address', function (req, res) {
 
 	Transaction.aggregate([
@@ -511,7 +552,6 @@ app.get('/api/inklin/search/:term', function (req, res) {
 		if (err)
 			console.log(err);
 		//	res.send(err);
-
 
 		res.json(results);
 	});

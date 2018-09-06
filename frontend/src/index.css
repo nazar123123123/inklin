@@ -118,8 +118,10 @@ body {
 }
 
 .transactions {
-  overflow-y: auto;
+  overflow-y: auto; 
   height: 300px;
+  z-index: 9999;
+  background-color: black;
 }
 
 .transactions p,span {
@@ -129,8 +131,18 @@ body {
 .bottompanel {
   position: absolute;
   bottom: 10px;
+  width: 100%;
+  height: 200px;
   left: 80px;
-  width: 95%;
+  z-index: 9999;
+  opacity: .8;
+}
+
+
+.toppanel {
+  position: absolute;
+  top: 10px;
+  width: 100%;
 }
 
 .datepicker input{
@@ -148,29 +160,26 @@ body {
 
 .history {
   opacity: .6;
-  margin-top: 10px;
-  height: 200px;
+  margin: 10px;
   /* Height of the footer */
   z-index: 9999;
   color: #40c4ff;
-  background-color: black;
 }
 
 .history li p {
   font-size: 10pt;
 
 }
-/* .history a {
+ .transactions td a {
   text-decoration: none;
-} */
+  color: white;
+} 
 
 .searchElement {
   padding: 10px;
 }
 
-.history a {
-text-decoration: none;
-}
+
 
 .searchPane {
   opacity: .6;
