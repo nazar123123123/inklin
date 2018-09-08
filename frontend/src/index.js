@@ -312,7 +312,7 @@ class Inklin extends React.Component {
       this.setState({addressStatsIsHidden: false, statsIsHidden: true,  data: data.docs, displayProgress: false, numberoftxs: data.length, url: `http://inkl.in/${this.state.current_block}`, screenshot: `http://img.inkl.in/api/shotter?block=${this.state.current_block}`, pagedescription: `Analysis of Ethereum address ${address} with ${data.length} transactions associated with it` })
 
       const zoomTimer = setInterval(() => {
-        this.state.network.fit({ animation: true })
+       // this.state.network.fit({ animation: true })
         // this.state.network.setOptions( { physics: false } );
 
         clearInterval(this.state.zoomTimer)
@@ -373,7 +373,7 @@ class Inklin extends React.Component {
 
 
     const zoomTimer = setInterval(() => {
-      this.state.network.fit({ animation: true })
+     // this.state.network.fit({ animation: true })
       clearInterval(this.state.zoomTimer)
     }, 2000);
 
@@ -429,7 +429,7 @@ class Inklin extends React.Component {
         this.setState({ data: data })
 
         const zoomTimer = setInterval(() => {
-          this.state.network.fit({ animation: true })
+        //  this.state.network.fit({ animation: true })
           clearInterval(this.state.zoomTimer)
           // this.state.network.setOptions( { physics: false } );
 
@@ -546,15 +546,32 @@ class Inklin extends React.Component {
       physics: {
         enabled: true,
         forceAtlas2Based: {
-          gravitationalConstant: -106,
+          gravitationalConstant: -100,
           centralGravity: 0.005,
           springLength: 230,
           springConstant: 0.18
         },
+        barnesHut: {
+          gravitationalConstant: -2000,
+          centralGravity: 0.3,
+          springLength: 95,
+          springConstant: 0.04,
+          damping: 0.09,
+          avoidOverlap: 0
+        },
+        stabilization: {
+          enabled: true,
+          iterations: 1000,
+          updateInterval: 100,
+          onlyDynamicEdges: false,
+          fit: true
+        },
+    
         maxVelocity: 50,
-        solver: 'forceAtlas2Based',
-        timestep: 1,
-        stabilization: false
+        minVelocity: 0.1,
+            solver: 'forceAtlas2Based',
+        timestep: 0.5,
+        stabilization: true
       }
     };
     return (
