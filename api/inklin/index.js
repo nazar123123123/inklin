@@ -191,11 +191,13 @@ function exposeTokens(t) {
 
 function getToken(address) {
 	const token = tokens.find(x => x.address === address)
-
 	return (token ? token["name"] : "")
-	// if (token) {
-	// 	return token["name"]
-	// }
+}
+
+function getTokenSymbol(address) {
+	const token = tokens.find(x => x.address === address)
+	console.log(token);
+	return (token ? token["symbol"] : "")
 }
 
 function getForceGraph(results) {
@@ -205,7 +207,8 @@ function getForceGraph(results) {
 	const links = []
 	const values = []
 	const hashes = []
-
+	const erc20_values = []
+	
 	const stats = { tokens: 0, contracts: 0, ethvalue: 0 }
 
 	for (t in results) {
@@ -239,6 +242,7 @@ function getForceGraph(results) {
 			}
 
 			hashes.push(hash)
+			
 			if (results[t]["data"].startsWith("0xa9059")) {
 				stats.tokens++
 				if (!tokens.includes(to) && !tmp_nodes.includes(to)) {
@@ -252,11 +256,13 @@ function getForceGraph(results) {
 				links.push({ from: from, to: to, color: "#2aaee2", hash: hash })
 				final_to = "0x" + results[t]["data"].slice(34, 74);
 
+				erc20_values.push(parseInt(results[t]["data"].slice(75),16))
+
 				if (!tmp_nodes.includes(final_to) && !tokens.includes(final_to)) {
 					tmp_nodes.push(final_to)
 				}
 
-				links.push({ from: to, to: final_to, color: "yellow", hash: hash })
+				links.push({ from: to, to: final_to, color: "yellow", hash: hash, value: parseInt(results[t]["data"].slice(75),16)/1000000000000000000, token: getTokenSymbol(to) })
 
 			} else {
 				stats.ethvalue = stats.ethvalue + results[t]["value"]
@@ -270,7 +276,7 @@ function getForceGraph(results) {
 					tmp_nodes.push(from)
 				}
 
-				links.push({ from: from, to: to, color: "#2aaee2", hash: hash })
+				links.push({ from: from, to: to, color: "#2aaee2", hash: hash, value: `Ξ${results[t]["value"]}` })
 			}
 		}
 

@@ -539,6 +539,8 @@ class Inklin extends React.Component {
     
 
     const options = {
+      autoResize: true,
+
       nodes: {
         shape: 'dot',
         size: 16
@@ -571,7 +573,7 @@ class Inklin extends React.Component {
         minVelocity: 0.1,
             solver: 'forceAtlas2Based',
         timestep: 0.5,
-        stabilization: true
+        stabilization: false
       }
     };
     return (
