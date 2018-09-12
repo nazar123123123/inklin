@@ -13,7 +13,7 @@ COPY . /usr/src/app
 RUN yarn build
 
 # production environment
-FROM nginx:1.13.9-alpine
+FROM nginx:1.13.9-alpine   
 COPY --from=builder /usr/src/app/build /usr/share/nginx/html
 
 # Fix NGINX config for React
