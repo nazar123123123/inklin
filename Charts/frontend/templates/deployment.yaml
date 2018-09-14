@@ -29,6 +29,8 @@ spec:
       labels:
         app: frontend
     spec:
+      imagePullSecrets:
+        - name: acr-secret
       containers:
       - name: frontend
         image: "{{.Values.image}}:{{.Values.imageTag}}"
@@ -43,3 +45,4 @@ spec:
           secretName: azure-files
           shareName: sitemaps
           readOnly: true
+    
