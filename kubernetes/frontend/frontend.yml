@@ -16,7 +16,15 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: inklin/frontend:latest
+        image: inklin/frontend:49e1e15
+        volumeMounts:
+        - name: sitemaps
+          mountPath: /usr/share/nginx/html/sitemaps
         ports: 
         - containerPort: 80
-   
+      volumes:
+      - name: sitemaps
+        azureFile:
+          secretName: azure-files
+          shareName: sitemaps
+          readOnly: true

@@ -16,7 +16,9 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+  name: frontend-deployment
+  labels:
+    app: frontend
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -27,15 +29,17 @@ spec:
       labels:
         app: frontend
     spec:
-      imagePullSecrets:
-        - name: acr-secret
       containers:
       - name: frontend
         image: "{{.Values.image}}:{{.Values.imageTag}}"
-       
-        resources:
-          requests:
-            cpu: "100m"
-        imagePullPolicy: Always
-        ports:
+        volumeMounts:
+        - name: sitemaps
+          mountPath: /usr/share/nginx/html/sitemaps
+        ports: 
         - containerPort: 80
+      volumes:
+      - name: sitemaps
+        azureFile:
+          secretName: azure-files
+          shareName: sitemaps
+          readOnly: true

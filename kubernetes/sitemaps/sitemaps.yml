@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sitemap
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: sitemap
+        image: inklin/sitemaps:latest
+        volumeMounts:
+        - name: sitemaps
+          mountPath: /mnt/sitemaps
+        ports: 
+        - containerPort: 80
+      volumes:
+      - name: sitemaps
+        azureFile:
+          secretName: azure-files
+          shareName: sitemaps
+          readOnly: false
