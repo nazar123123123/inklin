@@ -31,7 +31,7 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
 db.once('open', function () {
-	console.log("DB connection alive");
+	console.log("token list: DB connection alive");
 });
 
 
@@ -72,21 +72,23 @@ app.get('/api/inklin/transactions/:block', function (req, res) {
 	db.on('error', console.error.bind(console, 'connection error:'));
 
 	db.once('open', function () {
-		console.log("DB connection alive");
+		console.log("transactions: DB connection alive");
 	});
 
 	console.log(`Requesting ${req.params.block}`);
 
 	Transaction.find({ "block_number": req.params.block }, function (err, transactions) {
-		if (err)
+		if (err) { 
 			res.send(err);
+			db.close();
 
-		results = getForceGraph(transactions);
-		results.block_number = req.params.block
+		} else {
+			results = getForceGraph(transactions);
+			results.block_number = req.params.block
 
-		res.json(results);
-		db.close();
-
+			res.json(results);
+			db.close();
+		}
 	});
 });
 
@@ -105,7 +107,7 @@ app.get('/api/inklin/live/:lastblock', function (req, res) {
 	db.on('error', console.error.bind(console, 'connection error:'));
 
 	db.once('open', function () {
-		console.log("DB connection alive");
+		console.log("live: DB connection alive");
 	});
 
 	console.log(`Requesting ${req.params.lastblock}`);
@@ -164,7 +166,7 @@ app.get('/api/inklin/transactions/:from/:to', function (req, res) {
 	db.on('error', console.error.bind(console, 'connection error:'));
 
 	db.once('open', function () {
-		console.log("DB connection alive");
+		console.log("transactions from/to: DB connection alive");
 	});
 
 	from = new Date(req.params.from)
@@ -201,7 +203,6 @@ function getToken(address) {
 
 function getTokenSymbol(address) {
 	const token = tokens.find(x => x.address === address)
-	console.log(token);
 	return (token ? token["symbol"] : "")
 }
 
@@ -379,7 +380,7 @@ app.get('/api/inklin/token/:address', function (req, res) {
 	db.on('error', console.error.bind(console, 'connection error:'));
 
 	db.once('open', function () {
-		console.log("DB connection alive");
+		console.log("token: DB connection alive");
 	});
 
 
@@ -410,7 +411,7 @@ app.get('/api/inklin/txaddress/:address', function (req, res) {
 	db.on('error', console.error.bind(console, 'connection error:'));
 
 	db.once('open', function () {
-		console.log("DB connection alive");
+		console.log("txaddress: DB connection alive");
 	});
 
 	console.log(`Requesting ${req.params.lastblock}`);
@@ -474,7 +475,7 @@ app.get('/api/inklin/tokens/:block', function (req, res) {
 	db.on('error', console.error.bind(console, 'connection error:'));
 
 	db.once('open', function () {
-		console.log("DB connection alive");
+		console.log("tokens: DB connection alive");
 	});
 
 	Transaction.aggregate([
@@ -505,7 +506,7 @@ app.get('/api/inklin/histogram/:address', function (req, res) {
 	db.on('error', console.error.bind(console, 'connection error:'));
 
 	db.once('open', function () {
-		console.log("DB connection alive");
+		console.log("histogram: DB connection alive");
 	});
 
 	Transaction.aggregate([
@@ -576,7 +577,7 @@ app.get('/api/inklin/history/:currentblock', function (req, res) {
 	db.on('error', console.error.bind(console, 'connection error:'));
 
 	db.once('open', function () {
-		console.log("DB connection alive");
+		console.log("history: DB connection alive");
 	});
 
 
@@ -605,7 +606,7 @@ app.get('/api/inklin/stats', function (req, res) {
 	db.on('error', console.error.bind(console, 'connection error:'));
 
 	db.once('open', function () {
-		console.log("DB connection alive");
+		console.log("stats: DB connection alive");
 	});
 
 	Transaction.paginate({ "type": "token", "block_time": { "$gte": from, "$lte": to } }, { from: 1, to: 1, block_time: 1, data: 1, limit: 1000 }, function (err, results) {
