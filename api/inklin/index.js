@@ -416,13 +416,14 @@ app.get('/api/inklin/txaddress/:address', function (req, res) {
 	console.log(`Requesting ${req.params.lastblock}`);
 
 	Transaction.paginate({ "$or": [{ "from": req.params.address.toLowerCase() }, { "to": req.params.address.toLowerCase() }] }, { from: 1, to: 1, block_time: 1, data: 1, limit: 2000 }, function (err, results) {
-		console.log(results);
-		if (err)
+		if (err) {
 			console.log(err)
-		//res.send(err);
+			db.close();
+		}
 
 		results.docs = getForceGraph(results.docs)
 		res.json(results);
+		db.close();
 
 	});
 });
@@ -432,7 +433,6 @@ app.get('/api/inklin/address_stats/:address', function (req, res) {
 
 	client.trackNodeHttpRequest({ request: req, response: res });
 
-	Transaction.count({})
 	Transaction.paginate({ "$or": [{ "from": req.params.address.toLowerCase() }, { "to": req.params.address.toLowerCase() }] }, { from: 1, to: 1, block_time: 1, data: 1, limit: 2000 }, function (err, results) {
 		if (err)
 			console.log(err)
@@ -501,6 +501,13 @@ app.get('/api/inklin/tokens/:block', function (req, res) {
 
 app.get('/api/inklin/histogram/:address', function (req, res) {
 
+	var db = mongoose.connection;
+	db.on('error', console.error.bind(console, 'connection error:'));
+
+	db.once('open', function () {
+		console.log("DB connection alive");
+	});
+
 	Transaction.aggregate([
 		{ $match: { "$or": [{ 'to': req.params.address.toLowerCase() }, { 'from': req.params.address.toLowerCase() }] } },
 		{
@@ -517,10 +524,13 @@ app.get('/api/inklin/histogram/:address', function (req, res) {
 	], function (err, result) {
 		if (err) {
 			console.log(err);
+			db.close()
 			return;
 		}
 
 		res.json(result)
+		db.close()
+
 	});
 
 })
@@ -591,6 +601,12 @@ app.get('/api/inklin/stats', function (req, res) {
 	from = new Date(req.params.from)
 	to = new Date(req.params.to)
 
+	var db = mongoose.connection;
+	db.on('error', console.error.bind(console, 'connection error:'));
+
+	db.once('open', function () {
+		console.log("DB connection alive");
+	});
 
 	Transaction.paginate({ "type": "token", "block_time": { "$gte": from, "$lte": to } }, { from: 1, to: 1, block_time: 1, data: 1, limit: 1000 }, function (err, results) {
 		if (err)
@@ -600,12 +616,10 @@ app.get('/api/inklin/stats', function (req, res) {
 
 		for (t in results.docs) {
 			results.docs[t]["to"] = "0x" + results.docs[t]["data"].slice(34, 74);
-			// 	//transactions[t]["value"] = parseInt(transactions[t]["data"].slice(121),16)
-			// 	//console.log(transactions[t]["value"]/1000000)
 		}
 
 		res.json(results);
-
+		db.close()
 	});
 });
 
