@@ -37,10 +37,12 @@ db.once('open', function () {
 
 
 Token.find({}, function (err, t) {
-	if (err)
+	if (err) {
 		console.log(err)
-	else
+		db.close();
+	} else {
 		exposeTokens(t)
+	}
 });
 
 
@@ -83,6 +85,7 @@ app.get('/api/inklin/transactions/:block', function (req, res) {
 		results.block_number = req.params.block
 
 		res.json(results);
+		db.close();
 
 	});
 });
@@ -186,7 +189,9 @@ app.get('/api/inklin/transactions/:from/:to', function (req, res) {
 });
 
 function exposeTokens(t) {
-  	tokens = t
+	  tokens = t
+	  db.close();
+
 }
 
 function getToken(address) {
@@ -429,7 +434,6 @@ app.get('/api/inklin/address_stats/:address', function (req, res) {
 
 	Transaction.count({})
 	Transaction.paginate({ "$or": [{ "from": req.params.address.toLowerCase() }, { "to": req.params.address.toLowerCase() }] }, { from: 1, to: 1, block_time: 1, data: 1, limit: 2000 }, function (err, results) {
-		console.log(results);
 		if (err)
 			console.log(err)
 		//res.send(err);
@@ -606,8 +610,6 @@ app.get('/api/inklin/stats', function (req, res) {
 });
 
 
-
-//module.exports = createAzureFunctionHandler(app);
 
 const PORT = process.env.PORT || 7071;
 

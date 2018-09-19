@@ -1,5 +1,6 @@
 import urllib, json
 import glob
+import os
 
 
 # Set the latest Block form the API
@@ -36,6 +37,7 @@ for x in range(int(data["block_number"]), 1, -1):
 sitemapindex = '<?xml version="1.0" encoding="UTF-8"?>\n'
 sitemapindex = sitemapindex + '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
 
+os.remove("/mnt/sitemaps/map.xml")
 
 for file in glob.glob('*.xml'):
     sitemapindex = sitemapindex + '<sitemap>\n'
