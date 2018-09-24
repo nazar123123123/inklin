@@ -1,0 +1,26 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: sitemap
+spec:
+  schedule: "0 1 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: sitemap
+            image: inklin/sitemaps:latest
+            volumeMounts:
+            - name: sitemaps
+              mountPath: /mnt/sitemaps
+            ports: 
+            - containerPort: 80
+          volumes:
+          - name: sitemaps
+            azureFile:
+              secretName: azure-files
+              shareName: sitemaps
+              readOnly: false
+
+          restartPolicy: OnFailure

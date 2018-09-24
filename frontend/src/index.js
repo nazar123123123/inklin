@@ -15,6 +15,7 @@ import Card from './Card'
 import AddressCard from './AddressCard'
 import { Helmet } from "react-helmet";
 import Sharing from './Sharing'
+import Help from './Help'
 import './index.css';
 
 
@@ -526,6 +527,14 @@ class Inklin extends React.Component {
   }
 
 
+  handleHover = event => {
+    var { node } = event;
+    
+    console.log(`Hover on ${node}`)
+
+  }
+
+
   render() {
     //    const { data } = this.state;
     const { data, highlightLink } = this.state;
@@ -533,7 +542,8 @@ class Inklin extends React.Component {
 
     var events = {
     //  select: this.handleClick,
-      doubleClick: this.handleDrillDown,
+    doubleClick: this.handleDrillDown,
+    hoverNode: this.handleHover,
       
     }
     
@@ -545,6 +555,9 @@ class Inklin extends React.Component {
         shape: 'dot',
         size: 16
       },
+      interaction:{hover:true,     		tooltipDelay: 30,
+      },
+
       physics: {
         enabled: true,
         forceAtlas2Based: {
@@ -568,7 +581,6 @@ class Inklin extends React.Component {
           onlyDynamicEdges: false,
           fit: true
         },
-    
         maxVelocity: 50,
         minVelocity: 0.1,
             solver: 'forceAtlas2Based',
@@ -632,6 +644,7 @@ class Inklin extends React.Component {
         {this.state.data.edges.length > 0 && !this.state.statsIsHidden && <Card data={this.state.data.edges} title={`Block ${this.state.current_block}`} info={this.state.data.stats}  subtitle={this.state.block_time.toString()} handleSharing={this.handleSharing} />}
         {this.state.data.edges.length > 0 && !this.state.addressStatsIsHidden && <Card data={this.state.data.edges} title={`Address`} info={this.state.data.stats}  subtitle={this.state.address}  handleSharing={this.handleSharing} />}
         {!this.state.sharingIsHidden  && <Sharing block_number={this.state.current_block}  />}
+        <Help />
         </div>
 
         {!this.state.menuIsHidden && <div className="buildInfo">

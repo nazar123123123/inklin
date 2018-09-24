@@ -291,7 +291,7 @@ function getForceGraph(results) {
 	for (i in tmp_nodes) {
 		//const color = getColor(Math.max(...values), Math.min(...values), values[i], false)
 		//const color = getColor((parseInt(value) - Math.min(...values)) / (Math.max(...values) - Math.min(...values)))
-		nodes.push({ id: tmp_nodes[i], color: "white", title: tmp_nodes[i] })
+		nodes.push({ id: tmp_nodes[i], color: "white", title: tmp_nodes[i]})
 	}
 
 	for (i in tokens) {

@@ -117,6 +117,33 @@ body {
 
 }
 
+.whitedot {
+  height: 10px;
+  width: 10px;
+  background-color: white;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left:30px;
+}
+
+.bluedot {
+  height: 10px;
+  width: 10px;
+  background-color: #2aaee2;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left:30px;
+}
+
+.tx {
+  width: 20px;
+  height: 3px;
+  border-top: 1px solid white;
+  display: inline-block;
+  margin-left:30px;
+
+ }
+
 .transactions {
   overflow-y: auto; 
   height: 200px;
@@ -190,6 +217,20 @@ body {
   color: #40c4ff;
   background-color: black;
   margin-top:10px;
+}
+
+
+
+.helpPane {
+  opacity: .6;
+  padding-right: 10px;
+
+  /* Height of the footer */
+  z-index: 9999;
+  color: #40c4ff;
+  background-color: black;
+  margin-top:10px;
+  max-width: 350px;
 }
 
 .address {

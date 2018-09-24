@@ -1,0 +1,11 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: getTokens
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: gettokens
+        image: inklin/gettokens:latest
