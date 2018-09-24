@@ -17,7 +17,7 @@ import { Helmet } from "react-helmet";
 import Sharing from './Sharing'
 import Help from './Help'
 import './index.css';
-
+import StructuredData from './StructuredData'
 
 // Setup GA
 ReactGA.initialize('UA-64729178-1');
@@ -427,7 +427,7 @@ class Inklin extends React.Component {
 
         console.log(`Got ${data.edges.length} results`);
 
-        this.setState({ data: data })
+        this.setState({ data: data, url: `http://inkl.in/${this.state.current_block}`, screenshot: `http://img.inkl.in/api/shotter?block=${this.state.current_block}` })
 
         const zoomTimer = setInterval(() => {
         //  this.state.network.fit({ animation: true })
@@ -592,7 +592,9 @@ class Inklin extends React.Component {
 
 
 
+  
       <MuiThemeProvider theme={theme}>
+        <StructuredData description={this.state.pagedescription} headline={this.state.pagetitle} url={this.state.url} block_time={this.state.block_time} block_number={this.state.current_block} image={this.state.screenshot}/>
         <Helmet pagetitle={this.state.pagetitle}>
           <meta charSet="utf-8" />
           <title>{this.state.pagetitle}</title>
