@@ -633,7 +633,7 @@ class Inklin extends React.Component {
         <div className="rightpanel">
         {this.state.data.edges.length > 0 && !this.state.isScreenShot && <Card data={this.state.data.edges} title={`Block ${this.state.current_block}`} info={this.state.data.stats}  subtitle={this.state.block_time.toString()} handleSharing={this.handleSharing} />}
         {this.state.data.edges.length > 0 && !this.state.addressStatsIsHidden && <Card data={this.state.data.edges} title={`Address`} info={this.state.data.stats}  subtitle={this.state.address}  handleSharing={this.handleSharing} />}
-        {!this.state.isScreenShot  && <Sharing block_number={this.state.current_block}  />}
+        {!this.state.sharingIsHidden  && <Sharing block_number={this.state.current_block}  />}
         {!this.state.isScreenShot  && <Help />}
         </div>
 

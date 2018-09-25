@@ -23,6 +23,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 const styles = theme => ({
     card: {
         backgroundColor: 'rgba(0,0,0,0.5)',
+        
     },
 
     actions: {
@@ -64,7 +65,7 @@ class RecipeReviewCard extends React.Component {
 
         const stats = `${this.props.data.length} transactions (${this.props.info.tokens} ERC20), Ξ${parseInt(this.props.info.ethvalue)} transferred`
         return (
-            <Card className={classes.card}>
+            <Card className="infoPane">
                 <CardHeader
 
                     title={this.props.title}
@@ -93,7 +94,7 @@ class RecipeReviewCard extends React.Component {
                     >
                     </IconButton>
                 </CardActions>
-              
+
             </Card>
         );
     }
