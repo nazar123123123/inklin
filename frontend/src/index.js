@@ -66,6 +66,7 @@ class Inklin extends React.Component {
       sharingIsHidden: true,
       addressCardIsHidden: true,
       clicked_address: "",
+      isScreenShot: false,
       searchIsHidden: false,
       statsIsHidden: false,
       addressStatsIsHidden: true,
@@ -453,18 +454,6 @@ class Inklin extends React.Component {
 
 
 
-  hideVolume = () => {
-    this.setState({ volumeIsHidden: !this.state.volumeIsHidden })
-  }
-
-  hideSearch = () => {
-    this.setState({ searchIsHidden: !this.state.searchIsHidden })
-  }
-
-  hideStats = () => {
-    this.setState({ statsIsHidden: !this.state.statsIsHidden })
-  }
-
   handleLive = () => {
     console.log("Handling Live");
     this.state.isLive ? clearInterval(this.state.streamTimer) : this.stream()
@@ -479,7 +468,7 @@ class Inklin extends React.Component {
     console.log(myURL);
 
     if (myURL.hash === "#share") {
-      this.setState({ volumeIsHidden: true, menuIsHidden: true, infoIsHidden: true, searchIsHidden: true, statsIsHidden: true })
+      this.setState({ isScreenShot: true })
     }
 
     const searchTerm = myURL.pathname.slice(1);
@@ -626,16 +615,15 @@ class Inklin extends React.Component {
         </Helmet>
 
         <div className="leftpanel">
-        {!this.state.searchIsHidden && <SearchField handleFocus={this.props.handleFocus} handleLuis={this.handleLuis} />}
-        {!this.state.volumeIsHidden && <VolumeChart data={this.state.volume_data} options={this.state.volume_options} shouldRedraw={this.state.shouldRedraw} />}
+        {!this.state.isScreenShot && <SearchField handleFocus={this.props.handleFocus} handleLuis={this.handleLuis} />}
+        {!this.state.isScreenShot && <VolumeChart data={this.state.volume_data} options={this.state.volume_options} shouldRedraw={this.state.shouldRedraw} />}
         {!this.state.addressCardIsHidden && <AddressCard data={this.state.clicked.edges} title={`Address ${this.state.clicked_address}`} block_info={this.state.block_info}  block_time={this.state.block_time.toString()} numberoftxs={this.state.numberoftxs} />}
 
         </div>
         <div className="bottompanel">
-          {this.state.data.edges.length > 0 && <History data={this.state.data.edges} />}
+          {!this.state.isScreenShot && this.state.data.edges.length > 0 && <History data={this.state.data.edges} />}
          </div> 
 
-        {!this.state.menuIsHidden && <MiniDrawer handleLive={this.handleLive} handleVolume={this.hideVolume} handleSearch={this.hideSearch} handleStats={this.hideStats} showVolume={!this.state.volumeIsHidden} showStats={!this.state.statsIsHidden} showSearch={!this.state.searchIsHidden} isLive={this.state.isLive} currentBlock={this.state.current_block} />}
 
         {this.state.data.edges.length > 0 && <Graph getNetwork={network => this.setState({ network })} graph={this.state.data} events={events} options={options} />}
 
@@ -643,13 +631,13 @@ class Inklin extends React.Component {
 
         <SearchDialog open={this.state.showSearch} closeDrawer={this.handleCloseSearch} />
         <div className="rightpanel">
-        {this.state.data.edges.length > 0 && !this.state.statsIsHidden && <Card data={this.state.data.edges} title={`Block ${this.state.current_block}`} info={this.state.data.stats}  subtitle={this.state.block_time.toString()} handleSharing={this.handleSharing} />}
+        {this.state.data.edges.length > 0 && !this.state.isScreenShot && <Card data={this.state.data.edges} title={`Block ${this.state.current_block}`} info={this.state.data.stats}  subtitle={this.state.block_time.toString()} handleSharing={this.handleSharing} />}
         {this.state.data.edges.length > 0 && !this.state.addressStatsIsHidden && <Card data={this.state.data.edges} title={`Address`} info={this.state.data.stats}  subtitle={this.state.address}  handleSharing={this.handleSharing} />}
-        {!this.state.sharingIsHidden  && <Sharing block_number={this.state.current_block}  />}
-        <Help />
+        {!this.state.isScreenShot  && <Sharing block_number={this.state.current_block}  />}
+        {!this.state.isScreenShot  && <Help />}
         </div>
 
-        {!this.state.menuIsHidden && <div className="buildInfo">
+        {!this.state.isScreenShot && <div className="buildInfo">
           Build: {process.env.REACT_APP_SHA}
         </div>}
       </MuiThemeProvider>
